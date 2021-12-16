@@ -26,6 +26,9 @@ module.exports = (config) => {
         console.log('error', err);
         res.status(500).json({ message: "oops Something went wrong on app.use(..) [app.js]", err });
     });
+    app.use((req, res, next) => {
+        next(createError(404));
+    });
     //test
     app.get('/test', (req, res) => {
         res.status(200).send("messaging.test_messageflow()");
