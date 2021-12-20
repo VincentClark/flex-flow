@@ -1,18 +1,30 @@
-//import twilio from 'twilio';
+const twilio = require('twilio');
+
+
 
 class MessagingService {
     //create init function
     constructor(config) {
         this.account_sid = config.TWILIO_ACCOUNT_SID;
         this.auth_token = config.TWILIO_AUTH_TOKEN;
+        this.client = new twilio(this.account_sid, this.auth_token);
     }
-    create_messageflow(messageflow_sid) {
-        // const client = new twilio(account_sid, auth_token);
-        // client.taskrouter.v1.workspaces(workspace_sid).task_router_message_flows(messageflow_sid).create();
-        // const account_sid = config.TWILIO_ACCOUNT_SID;
+    createChannel(flexFlowSid) {
+        this.client.flexApi.channel
+            .create({
+                flexFlowSid: flexFlowSid,
+                identity: 'itentity',
+                chatUserFriendlyName: 'chatUserFriendlyName',
+
+            })
+            .then(channel => console.log(channel.sid))
+            .then(channel => { return channel.sid }
+            )
+
     }
     test_messageflow() {
-        return `test_messageflow ${this.account_sid}`;
+        console.log(this.client)
+        return `channel sid ${this.create_messageflow(0)}`;
     }
 }
 
