@@ -5,7 +5,8 @@
   "main": "bin/www",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node bin/www"
+    "start": "node bin/www",
+    "function": "node function.js"
   },
   "author": "Vincent Clark",
   "license": "ISC",

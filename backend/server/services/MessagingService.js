@@ -1,6 +1,8 @@
 const twilio = require('twilio');
 
-
+// customers name
+// message sending
+// message receiving
 
 class MessagingService {
     //create init function
@@ -9,16 +11,17 @@ class MessagingService {
         this.auth_token = config.TWILIO_AUTH_TOKEN;
         this.client = new twilio(this.account_sid, this.auth_token);
     }
-    createChannel(flexFlowSid) {
-        this.client.flexApi.channel
+    async createChannel(flexFlowSid = "FW52e45e3cf1dc35b681b2e0ff8d0c97c3", channelType = "sms", chatUserFriendlyName = "chatUserFriendlyName") {
+        await this.client.flexApi.channel
             .create({
                 flexFlowSid: flexFlowSid,
                 identity: 'itentity',
-                chatUserFriendlyName: 'chatUserFriendlyName',
-
+                chatUserFriendlyName: chatUserFriendlyName,
+                channelType: channelType,
+                chatFriendlyName: 'chatFriendlyName'
             })
             .then(channel => console.log(channel.sid))
-            .then(channel => { return channel.sid }
+            .then(channel => { return JSON.stringify(channel) }
             )
 
     }
