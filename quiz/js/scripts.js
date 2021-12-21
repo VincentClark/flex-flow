@@ -212,7 +212,7 @@ function secondScare() {
         mySurprise();
     });
     sorryButton2.addEventListener("click", function () {
-        mySurprise
+        mySurprise();
     });
     sorry.appendChild(sorryMessage);
     sorryParagraph.appendChild(sorryButton1);
