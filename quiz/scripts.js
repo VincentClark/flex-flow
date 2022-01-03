@@ -25,7 +25,6 @@ const questions = [
             }
         ]
     },
-
     {
         question: "Which came first, the chicken or the egg?",
         type: "radio",
@@ -54,15 +53,15 @@ const questions = [
             },
             {
                 text: "Santa Monica",
-                correct: 2
+                correct: 0
             },
             {
                 text: "Ann Arbor",
-                correct: 1
+                correct: 2
             },
             {
                 text: "None of the above",
-                correct: 1
+                correct: 2
             }
         ]
     },
@@ -88,7 +87,6 @@ const questions = [
             }
         ]
     },
-
     {
         question: "How much do you like this quiz so far?",
         type: "radio",
@@ -117,67 +115,27 @@ const questions = [
         answers: [
             {
                 text: "Happy",
-                correct: 1
+                correct: 2
             },
             {
                 text: "Sad",
-                correct: 1
-            },
-            {
-                text: "Created a dislike for Squirrels",
-                correct: 1
-            },
-            {
-                text: "A feel that I cannot quantify in 2021, but I do not want to be a Squirrels",
-                correct: 1
-            }
-        ]
-    },
-    {
-        question: "Where would you find a turtle?",
-        type: "checkbox",
-        answers: [
-            {
-                text: "In my room",
                 correct: 2
             },
             {
-                text: "Outside",
+                text: "Created a dislike for squirls",
                 correct: 2
             },
             {
-                text: "Eating a squirl",
-                correct: 2
-            },
-            {
-                text: "No where, turtles are not real",
+                text: "A feel that I cannot quantify in 2021, but I do not want to be a squirl",
                 correct: 2
             }
         ]
-    },
-    {
-        question: "Match the color to the question",
-        type: "color",
-        answers: [
-            {
-                text: "What is the color of the sky?",
-                correct: 2,
-            },
-            {
-                text: "Your favorite color?",
-                correct: 2
-            },
-            {
-                text: "What is the color of the sun?",
-                correct: 2
-            }
-        ]
-    },
+    }
 ];
 const scareSorries = [
     "I am sorry, that was not cool. See, 2021, was full of surpises, would you like to finish the quiz?",
-    "Just Kidding, Seriously, do you want to finish the quiz?",
-    "Been that kind of year huh? Lets finish the quiz"
+    "I am soory, that was not cool. See, 2021, was full of surpises, would you like to finish the quiz?",
+    "I am srry, that was not cool. See, 2021, was full of surpises, would you like to finish the quiz?",
 ];
 let startScares = scareSorries.length;
 let deactivate = false;
@@ -193,55 +151,42 @@ const scareImage = document.createElement("img");
 scareImage.src = "images/volder.jpg";
 const scareAudio = document.createElement("audio");
 scareAudio.src = "audio/Scary.mp3";
-let beenScared = false;
-function setBeenScared(bool) {
-    beenScared = bool;
-}
-function myTimer(t = 10) {
-    let time = t;
+function myTimer() {
+    let time = 2;
     let timer = setInterval(function () {
         time--;
         if (time <= 0) {
-            clearInterval(timer);
             if (deactivate != true) {
                 const boo = mySurprise();
             }
 
             // surprise.appendChild(mySurprise());
-
+            clearInterval(timer);
 
         }
         else {
-            // document.getElementById("timer").innerHTML = `First ${time}?`;
+            document.getElementById("timer").innerHTML = time;
         }
     }, 1000);
 }
 
-function scareTimer(t = 8) {
+function scareTimer(t = 5) {
     let time = t;
     let timer = setInterval(function () {
         time--;
         if (time <= 0) {
             clearInterval(timer);
-            secondScare(true, setBeenScared)
+            secondScare()
         }
         else {
-            // document.getElementById("timer").innerHTML = `Second Scare ${time}`;
+            document.getElementById("timer").innerHTML = time;
         }
     }, 1000);
 
 }
-let scared = scareSorries.length;
-function secondScare(amScared, method = setBeenScared) {
-    if (!amScared) {
-        scareTimer(10);
-        console.log("second scare", amScared);
-        method(true);
-    }
-    console.log(scared);
-    if (scared > 0) {
-        scared = scared - 1;
-    }
+function secondScare() {
+    scareTimer(10);
+
     const scare = document.getElementById("scare");
     // scare.classList.add("second-scare");
     scare.setAttribute("style", "opacity: .4");
@@ -249,7 +194,7 @@ function secondScare(amScared, method = setBeenScared) {
     sorry.classList.add("sorry");
     sorry.setAttribute("id", "sorry");
     //sorry.classList.add("sorry");
-    const sorryText = scareSorries[scared];
+    const sorryText = scareSorries[0];
     const sorryMessage = document.createTextNode(sorryText);
     sorryButton = document.createElement("button");
     sorryButton.classList.add("sorry-button");
@@ -264,10 +209,10 @@ function secondScare(amScared, method = setBeenScared) {
     sorryButton1.value = "Yes";
     sorryButton2.value = "No";
     sorryButton1.addEventListener("click", function () {
-        scareCleanUp(scare, sorry);
+        mySurprise();
     });
     sorryButton2.addEventListener("click", function () {
-        scareCleanUp(scare, sorry);
+        mySurprise
     });
     sorry.appendChild(sorryMessage);
     sorryParagraph.appendChild(sorryButton1);
@@ -278,16 +223,9 @@ function secondScare(amScared, method = setBeenScared) {
 
     return null;
 }
-
-function scareCleanUp(id1, id2) {
-    id2.remove();
-    mySurprise();
-}
-
-
 function mySurprise() {
     console.log("my surprise")
-    scareTimer(5);
+    scareTimer(3);
     const scare = document.getElementById("scare");
     scare.setAttribute("style", "opacity: 1");
     scare.classList.add("container");

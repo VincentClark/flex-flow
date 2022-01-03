@@ -1,5 +1,5 @@
 import * as FlexPlugin from 'flex-plugin';
 
-import OutboundsmsPlugin from './OutboundsmsPlugin';
+import Flxr6Plugin from './Flxr6Plugin';
 
-FlexPlugin.loadPlugin(OutboundsmsPlugin);
+FlexPlugin.loadPlugin(Flxr6Plugin);
