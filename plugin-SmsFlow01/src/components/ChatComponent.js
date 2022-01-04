@@ -14,6 +14,8 @@ const ChatComponent = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [didSend, setDidSend] = useState("none");
     const [sendMessage, setSendMessage] = useState("");
+    const [fromAgent, setFromAgent] = useState("");
+    const [friendlyName, setFriendlyName] = useState("");
 
     // Handlers
 
@@ -30,7 +32,10 @@ const ChatComponent = () => {
         setCreateTask(e.target.checked);
     }
     const handleFriendlyNameChange = (e) => {
-        setFromNumber(e.target.value);
+        setFriendlyName(e.target.value);
+    }
+    const handleFromAgentChange = (e) => {
+        setFromAgent(e.target.value);
     }
     // const handleSendMessage = () => {
     //     setIsLoading(true);
@@ -55,7 +60,7 @@ const ChatComponent = () => {
             axios({
                 method: 'post',
                 url: 'http://localhost:8000/messaging/sms-service',
-                data: `toNumber=${toNumber}&message=${message}&createTask=${createTask}`,
+                data: `toNumber=${toNumber}&message=${message}&createTask=${createTask},&fromNumber=${fromNumber}&friendlyName=${friendlyName}&fromAgent=${fromAgent}`,
                 headers: { 'content-type': 'application/x-www-form-urlencoded' }
 
             }).then((response) => {
@@ -93,8 +98,8 @@ const ChatComponent = () => {
                         <ChatDiv><ChatInput type="textfield" name="to_friendly" id="to_friendly" onChange={(event) => handleFriendlyNameChange(event)} /></ChatDiv>
                     </ChatBox>
                     <ChatBox>
-                        <ChatLabel>Task Sid:</ChatLabel>
-                        <ChatDiv><ChatInput type="textfield" name="task_sid" id="task_sid" onChange={(event) => handleFriendlyNameChange(event)} /></ChatDiv>
+                        <ChatLabel>From Agent:</ChatLabel>
+                        <ChatDiv><ChatInput type="textfield" name="from_agent" id="from_agent" onChange={(event) => handleFromAgentChange(event)} /></ChatDiv>
                     </ChatBox>
                     <ChatBox>
                         <ChatLabel>Message</ChatLabel>

@@ -21,6 +21,7 @@ class MessagingService {
         this.client = new twilio(this.account_sid, this.auth_token, this.workspace_sid, this.workflow_sid);
         console.log(config);
     }
+
     async createTask() {
         const taskSid = await this.client.taskrouter.workspaces(this.workspace_sid).tasks.create({
             workflowSid: this.workflow_sid,
@@ -28,12 +29,12 @@ class MessagingService {
                 '1': '1',
             })
         }).then(taskSid => {
-            console.log(taskSid);
+            console.log("service", taskSid);
             return (taskSid);
         }
         );
     }
-    async outboundSMS(toNumber = "+16268985404", fromNumber = this.twilio_phone_number, friendlyName = "Valued Customer", message = "Hello World", taskcreated = false, taskSid = "") {
+    async outboundSMS(toNumber = "+16268985404", fromNumber = this.twilio_phone_number, friendlyName = "Valued Customer", message = "Hello World", taskcreated = false, fromAgent = "Friendly Agent") {
 
         const flexFlowSid = this.flex_flow_sid;
         console.log("FLEX_FLOW_SID", this.flex_flow_sid)
@@ -88,16 +89,41 @@ class MessagingService {
 
         console.log("5-ChatAttributes", chatAttributes.attributes);
 
-        const sendMessage =
-            await this.client.proxy.services(this.proxy_service_sid)
-                .sessions(proxySession.sid)
-                .participants(addCustomer.sid)
-                .messageInteractions
-                .create({
-                    body: message
-                })
-        console.log('5-Message sent!', sendMessage);
+        // const sendMessage =
+        //     await this.client.proxy.services(this.proxy_service_sid)
+        //         .sessions(proxySession.sid)
+        //         .participants(addCustomer.sid)
+        //         .messageInteractions
+        //         .create({
+        //             body: message
+        //         })
+        // const sendMessage = await sendCustomerMessage(toNumber, fromNumber, friendlyName, message, path = "channel");
+        // console.log('5-Message sent!', sendMessage);
+        const sendMessage = this.client.chat.services(this.chat_service_sid)
+            .channels(this.channel_sid)
+            .messages
+            .create({
+                body: message,
+                from: fromAgent,
+            })
+            .then(message => console.log(message.sid))
+            .catch(err => console.log("error message", err.message))
+        return sendMessage;
     }
+    // async sendCustomerMessage(toNumber, fromNumber, friendlyName, message, path = "channel") {
+    //     console.log("channel sid", this.channel_sid)
+    //     const sendMessage = this.client.chat.services(this.chat_service_sid)
+    //         .channels(this.channel_sid)
+    //         .message
+    //         .create({
+    //             body: message,
+    //             from: agentName,
+    //         })
+    //         .then(message => console.log(message.sid))
+    //         .catch(err => console.log("error message", err.message))
+    //     return sendMessage;
+    // }
+
     test_messageflow() {
         console.log(this.client)
         return `channel sid ${this.create_messageflow(0)}`;

@@ -31,9 +31,9 @@ module.exports = (params) => {
     router.post('/sms-service', (req, res) => {
 
         try {
-            const { fromNumber, toNumber, friendlyName, message, createTask } = req.body;
+            const { fromNumber, toNumber, friendlyName, message, createTask, fromAgent } = req.body;
             console.log("ReqBody", req.body);
-            const myMessage = messaging.outboundSMS(toNumber, fromNumber, friendlyName, message, createTask);
+            const myMessage = messaging.outboundSMS(toNumber, fromNumber, friendlyName, message, createTask, fromAgent);
             res.status(200).json({
                 message: "SMS-Sent",
                 details: "myMessage"
