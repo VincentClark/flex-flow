@@ -33,7 +33,11 @@ module.exports = (params) => {
         try {
             const { fromNumber, toNumber, friendlyName, message, createTask, fromAgent } = req.body;
             console.log("ReqBody", req.body);
-            const myMessage = messaging.outboundSMS(toNumber, fromNumber, friendlyName, message, createTask, fromAgent);
+            if (createTask === 'true') {
+                const myMessage = messaging.strategyAOutboundSMS(toNumber, fromNumber, friendlyName, message, createTask, fromAgent);
+            } else {
+                const myMessage = messaging.strategyBOutboundSMS(toNumber, fromNumber, friendlyName, message, createTask, fromAgent);
+            }
             res.status(200).json({
                 message: "SMS-Sent",
                 details: "myMessage"
