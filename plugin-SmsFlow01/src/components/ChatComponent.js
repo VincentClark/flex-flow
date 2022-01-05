@@ -60,7 +60,7 @@ const ChatComponent = () => {
             axios({
                 method: 'post',
                 url: 'http://localhost:8000/messaging/sms-service',
-                data: `toNumber=${toNumber}&message=${message}&createTask=${createTask},&fromNumber=${fromNumber}&friendlyName=${friendlyName}&fromAgent=${fromAgent}`,
+                data: `toNumber=${toNumber}&message=${message}&createTask=${createTask}&fromNumber=${fromNumber}&friendlyName=${friendlyName}&fromAgent=${fromAgent}`,
                 headers: { 'content-type': 'application/x-www-form-urlencoded' }
 
             }).then((response) => {
