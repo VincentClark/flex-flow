@@ -22,9 +22,15 @@ module.exports = (params) => {
         console.log("messagingInfo", messagingInfo)
         res.status(200).json({ 'messagingInfo': messagingInfo });
     })
-
+    router.post('/create-task', async (req, res) => {
+        const { fromNumber, toNumber, friendlyName, message } = req.body;
+        console.log('create-task');
+        const task = await messaging.create_messageflow(fromNumber, toNumber, friendlyName, message);
+        console.log('task', task);
+        res.status(200).json({ 'message': 'create-task' });
+    })
     router.post('/createTask', async (req, res) => {
-        const task = messaging.createTask();
+        const task = messaging.createChannel();
         console.log("task", task)
         res.status(200).json({ 'task': task });
     })
@@ -46,6 +52,10 @@ module.exports = (params) => {
             res.status(500).json({ message: "oops Something went wrong on router.post(/sms-service)", err });
         }
     });
+    router.post('/callback', (req, res) => {
+        //console.log("callback", req.body);
+        res.status(200).json({ 'message': 'callback' });
+    })
     router.post('/sms', async (req, res) => {
         console.log("BODY", req.body);
         const twiml = new MessagingResponse();
