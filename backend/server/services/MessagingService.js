@@ -167,12 +167,12 @@ class MessagingService {
 
         }
         const channel = await this.client.flexApi.channel.create({
-            target: `${fromNumber}`,
+            target: `+${fromNumber}`,
             taskAttributes: JSON.stringify(taskAttributes),
             identity: `sms_${fromNumber}`,
             chatFriendlyName: `chat user ${friendlyName}`,
             flexFlowSid: flexFlowSid,
-            chatUserFriendlyName: `From This Number  ${toNumber}`,
+            chatUserFriendlyName: `${toNumber}`,
         }).then(channel => {
             console.log("channel", channel);
             this.channel_sid = channel.sid;
@@ -180,7 +180,10 @@ class MessagingService {
         }).catch(err => {
             console.log("ERROR", err)
         })
-        console.log("2-CHANNEL SID", channel.sid)
+        // console.log("2-CHANNEL SID", channel.sid)
+        // let chatTaskAttributes = channel.taskAttributes;
+        // console.log("type of", typeof chatTaskAttributes);
+        // console.log("chatTaskAttributes", chatTaskAttributes);
         // Stragegy 1
         const proxySession = await this.client.proxy.services(this.proxy_service_sid)
             .sessions
@@ -208,20 +211,39 @@ class MessagingService {
 
                 })
 
-        console.log("4-addAgent.sid", addAgent);
-        taskAttributes['proxySessionSid'] = proxySession.sid;
-        // console.log("taskAttributes", taskAttributes);
-        const chatAttributes =
-            await this.client.chat.services(this.chat_service_sid)
-                .channels(channel.sid)
-                .update({ attributes: taskAttributes })
-                .then(chatAttributes => {
-                    console.log("chatAttributes", chatAttributes);
-                    return (chatAttributes);
-                })
+        // console.log("4-addAgent.sid", addAgent);
+        taskAttributes['proxySession'] = proxySession.sid;
+
+        //   console.log("taskAttributes", taskAttributes);
+        // const chatAttributes =
+        //     await this.client.chat.services(this.chat_service_sid)
+        //         .channels(channel.sid)
+        //         .update({
+        //             attributes:
+        //                 JSON.stringify(
+        //                     {
+        //                         to: `${toNumber}`,
+        //                         direction: 'outbound',
+        //                         name: 'Valued Customer John',
+        //                         from: `${fromNumber}`,
+        //                         targetWorker: '1==1',
+        //                         vincent: 'true',
+        //                         autoAnswer: 'true',
+        //                         proxySession: proxySession.sid
+        //                     }
+        //                 )
+        //         })
+        //         .then(chatAttributes => {
+        //             console.log("chatAttributes", chatAttributes);
+        //             return (chatAttributes);
+        //         })
+        //         .catch(err => {
+        //             console.log("error", err);
+        //         })
 
 
         console.log("5-ChatAttributes", chatAttributes);
+        console.log(channel)
 
         // const sendInitialMessage = this.client.proxy.services(this.proxy_service_sid)
         //     .sessions(proxySession.sid)
