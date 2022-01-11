@@ -35,7 +35,7 @@ class MessagingService {
                 'integration.workspaceSid': this.workspace_sid,
                 'integration.channel': this.task_channel_sid,
                 janitorEnabled: true,
-                friendlyName: 'Outbound SMS IV',
+                friendlyName: 'Outbound SMS III',
                 chatServiceSid: this.chat_service_sid,
                 channelType: 'sms'
             })
@@ -174,6 +174,7 @@ class MessagingService {
             .catch(err => console.log("error message", err.message))
         console.log('5-Message sent!', sendMessage);
     }
+
     async strategyAOutboundSMS(toNumber = "+16268985404", fromNumber = '+14153389812', friendlyName = "Valued Customer", message = "Hello World", createTask = 'true', fromAgent = "Friendly Agent") {
         console.log("StratA")
         const flexFlowSid = this.flex_flow_sid_a;
@@ -194,12 +195,12 @@ class MessagingService {
             chatUserFriendlyName: `${toNumber}`,
         }).then(channel => {
             console.log("channel", channel);
-            this.channel_sid = channel.sid;
+
             return (channel);
         }).catch(err => {
             console.log("ERROR", err)
         })
-        console.log("2-CHANNEL SID", channel.sid)
+        // console.log("2-CHANNEL SID", channel.sid)
         // let chatTaskAttributes = channel.taskAttributes;
         // console.log("type of", typeof chatTaskAttributes);
         // console.log("chatTaskAttributes", chatTaskAttributes);
@@ -208,13 +209,10 @@ class MessagingService {
         const proxySession = await this.client.proxy.services(this.proxy_service_sid)
             .sessions
             .create({
-                uniqueName: `${this.channel_sid}`,
+                uniqueName: `${channel.sid}`,
                 mode: 'message-only',
                 participants: [{
                     'Identifier': `${toNumber}`,
-                    'ProxyIdentifier': `+${fromNumber}`,
-                    'FriendlyName': `${friendlyName}`
-
                 }]
             })
             .then(session => {
@@ -225,6 +223,8 @@ class MessagingService {
 
         console.log("ProxySid-3", proxySession.sid);
         //console.log("chat sid", this.channel_sid);
+        //fetch the chat attributes
+
         const addAgent =
             await this.client.proxy.services(this.proxy_service_sid)
                 .sessions(proxySession.sid)
@@ -235,18 +235,18 @@ class MessagingService {
                     identifier: channel.sid
                 })
 
-        // console.log("4-addAgent.sid", addAgent);
-        taskAttributes['proxySession'] = proxySession.sid;
-
-        console.log("taskAttributes", taskAttributes);
-
-        //change name to channel
         const chatAttributes =
             await this.client.chat.services(this.chat_service_sid)
                 .channels(channel.sid)
                 .update({
-                    attributes: taskAttributes
-
+                    attributes: JSON.stringify(await this.client.chat.services(this.chat_service_sid)
+                        .channels(channel.sid)
+                        .fetch()
+                        .then(
+                            attributes => {
+                                return Object.assign(JSON.parse(attributes.attributes), { proxySession: proxySession.sid })
+                            }
+                        ))
                 })
                 .then(chatAttributes => {
                     console.log("chatAttributes", chatAttributes);
@@ -259,27 +259,14 @@ class MessagingService {
 
         console.log("5-ChatAttributes", chatAttributes);
         console.log(channel)
-        /*
-          JSON.stringify(
-                                    {
-                                        to: `${toNumber}`,
-                                        direction: 'outbound',
-                                        name: 'Valued Customer John',
-                                        from: `${fromNumber}`,
-                                        targetWorker: '1==1',
-                                        vincent: 'true',
-                                        autoAnswer: 'true',
-                                        proxySession: proxySession.sid
-                                    }
-                                )
-        */
-        // const sendInitialMessage = this.client.proxy.services(this.proxy_service_sid)
-        //     .sessions(proxySession.sid)
-        //     .participants(addAgent.sid)
-        //     .messageInteractions
-        //     .create({
-        //         body: 'Message from Twilio',
-        //     })
+
+        const sendInitialMessage = this.client.proxy.services(this.proxy_service_sid)
+            .sessions(proxySession.sid)
+            .participants(addAgent.sid)
+            .messageInteractions
+            .create({
+                body: message,
+            })
         //     .then(message_interaction => console.log("message interaction", message_interaction))
         // console.log("channel", channel)
         // console.log("sendInitialMessage", sendInitialMessage);
