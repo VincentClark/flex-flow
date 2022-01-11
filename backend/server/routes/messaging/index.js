@@ -22,6 +22,11 @@ module.exports = (params) => {
         console.log("messagingInfo", messagingInfo)
         res.status(200).json({ 'messagingInfo': messagingInfo });
     })
+    router.get('/create-flow', (req, res) => {
+        const messagingInfo = messaging.flexFlow();
+        console.log("messagingInfo", messagingInfo)
+        res.status(200).json({ 'messagingInfo': messagingInfo });
+    })
     router.post('/create-task', async (req, res) => {
         const { fromNumber, toNumber, friendlyName, message } = req.body;
         console.log('create-task');
