@@ -168,7 +168,7 @@ class MessagingService {
             .messages
             .create({
                 body: message,
-                from: `${fromNumber}`,
+                from: `${toNumber}`,
             })
             .then(message => console.log(message.sid))
             .catch(err => console.log("error message", err.message))

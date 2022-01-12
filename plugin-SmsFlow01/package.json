@@ -16,6 +16,6 @@
   },
   "devDependencies": {
     "@twilio/flex-ui": "^1",
-    "react-test-renderer": "16.5.2"
+    "react-test-renderer": "16.13.1"
   }
 }

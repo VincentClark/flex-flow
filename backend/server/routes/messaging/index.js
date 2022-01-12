@@ -44,15 +44,30 @@ module.exports = (params) => {
         try {
             const { fromNumber, toNumber, friendlyName, message, createTask, fromAgent } = req.body;
             console.log("ReqBody", req.body);
-            if (createTask === 'true') {
-                const myMessage = messaging.strategyAOutboundSMS(toNumber, fromNumber, friendlyName, message, createTask, fromAgent);
-            } else {
-                const myMessage = messaging.strategyBOutboundSMS(toNumber, fromNumber, friendlyName, message, createTask, fromAgent);
+            const myMessage = (create_task) => {
+                if (create_task === 'true') {
+                    const myMessage = messaging.strategyAOutboundSMS(toNumber, fromNumber, friendlyName, message, create_task, fromAgent);
+                } else {
+                    const myMessage = messaging.strategyBOutboundSMS(toNumber, fromNumber, friendlyName, message, create_task, fromAgent);
+                }
             }
-            res.status(200).json({
-                message: "SMS-Sent",
-                details: "myMessage"
-            });
+            const details = myMessage(createTask).
+                then(message => {
+                    console.log("message", message);
+                    res.status(200).json({
+                        'message': 'success',
+                        'details': message
+                    });
+                }).catch(err => {
+                    console.log("err", err);
+                    res.status(500).json({
+                        'message': 'error',
+                        'details': err
+                    });
+                })
+            console.log("details", details);
+
+
         } catch (err) {
             res.status(500).json({ message: "oops Something went wrong on router.post(/sms-service)", err });
         }
