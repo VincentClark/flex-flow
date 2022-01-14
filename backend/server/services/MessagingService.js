@@ -25,28 +25,26 @@ class MessagingService {
         this.client = new twilio(this.account_sid, this.auth_token, this.workspace_sid, this.workflow_sid);
         console.log(config);
     }
-    async flexFlow() {
+    async flexFlow(contactIdentity, enabled = false, inegrationType = 'task', janitorEnabled = true, friendlyName = 'FriendlyName', channelType = 'sms') {
         this.client.flexApi.flexFlow
             .create({
-                contactIdentity: '+14153389812',
-                enabled: false,
-                integrationType: 'task',
+                contactIdentity: contactIdentity,
+                enabled: enabled,
+                integrationType: inegrationType,
                 'integration.workflowSid': this.workflow_sid,
                 'integration.workspaceSid': this.workspace_sid,
                 'integration.channel': this.task_channel_sid,
-                janitorEnabled: true,
-                friendlyName: 'Outbound SMS III',
+                janitorEnabled: janitorEnabled,
+                friendlyName: friendlyName,
                 chatServiceSid: this.chat_service_sid,
-                channelType: 'sms'
+                channelType: channelType
             })
             .then(flex_flow => console.log(flex_flow))
             .then(flex_flow => {
                 return flex_flow.sid
             })
-
-
     }
-    async createTask() {
+    async createTask(attributes = { '1': '1' }) {
         const taskSid = await this.client.taskrouter.workspaces(this.workspace_sid).tasks.create({
             workflowSid: this.workflow_sid,
             attributes: JSON.stringify({
@@ -283,6 +281,9 @@ class MessagingService {
     getChattAttributes() {
         console.log("channel sid", this.channel_sid)
         return this.channel_sid;
+    }
+    async whatsapp_webhook() {
+        return "Testing";
     }
 
 }

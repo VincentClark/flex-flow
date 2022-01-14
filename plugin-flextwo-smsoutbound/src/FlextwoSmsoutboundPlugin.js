@@ -25,7 +25,7 @@ export default class FlextwoSmsoutboundPlugin extends FlexPlugin {
     const options = { sortOrder: -1 };
     flex.AgentDesktopView.Panel1.Content.add(<CustomTaskListContainer key="FlextwoSmsoutboundPlugin-component" />, options);
   }
-
+  //Twilio-CRMContainer-PlaceHolder css-qs7bxn
   /**
    * Registers the plugin reducers
    *

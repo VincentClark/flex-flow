@@ -167,6 +167,8 @@ const ChatBody = styled("div")`
                 font-size: 14px;
                 letter-spacing: 1px;
                 max-width: 800px;
+                border: 3px solid ${props => props.theme.colors.base3};
+                border: radius: 5px;
                 color: ${props => props.theme.colors.base9};
                 `;
 const ChatInput = styled("input")`

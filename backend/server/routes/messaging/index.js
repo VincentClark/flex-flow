@@ -44,11 +44,11 @@ module.exports = (params) => {
         try {
             const { fromNumber, toNumber, friendlyName, message, createTask, fromAgent } = req.body;
             console.log("ReqBody", req.body);
-            const myMessage = (create_task) => {
+            const myMessage = async (create_task) => {
                 if (create_task === 'true') {
-                    const myMessage = messaging.strategyAOutboundSMS(toNumber, fromNumber, friendlyName, message, create_task, fromAgent);
+                    const myMessage = await messaging.strategyAOutboundSMS(toNumber, fromNumber, friendlyName, message, create_task, fromAgent);
                 } else {
-                    const myMessage = messaging.strategyBOutboundSMS(toNumber, fromNumber, friendlyName, message, create_task, fromAgent);
+                    const myMessage = await messaging.strategyBOutboundSMS(toNumber, fromNumber, friendlyName, message, create_task, fromAgent);
                 }
             }
             const details = myMessage(createTask).
@@ -76,6 +76,17 @@ module.exports = (params) => {
         //console.log("callback", req.body);
         res.status(200).json({ 'message': 'callback' });
     })
+    router.post('/whatsapp-service', (req, res) => {
+        //console.log("whatsapp-service", req.body);
+        const whatsapp = messaging.whatsapp_webhook(req.body)
+            .then(message => {
+                console.log("message", message);
+                res.status(200).send(message);
+            }).catch(err => {
+                console.log("err", err);
+                res.status(500).send(err);
+            })
+    })
     router.post('/sms', async (req, res) => {
         console.log("BODY", req.body);
         const twiml = new MessagingResponse();
@@ -88,6 +99,7 @@ module.exports = (params) => {
         res.end(twiml.toString());
     });
     router.post('/sms-callback', async (req, res) => {
+
         console.log("BODY", req.body);
     });
     return (router);

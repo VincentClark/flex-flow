@@ -3,4 +3,5 @@
 /plugin-outbountsms/node_modules
 .env
 notes.txt
-*.txt
+
+/private/*
