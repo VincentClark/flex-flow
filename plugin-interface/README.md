@@ -7,7 +7,7 @@ Twilio Flex Plugins allow you to customize the appearance and behavior of [Twili
 Make sure you have [Node.js](https://nodejs.org) as well as [`npm`](https://npmjs.com). We support Node >= 10.12 (and recommend the _even_ versions of Node). Afterwards, install the dependencies by running `npm install`:
 
 ```bash
-cd
+cd 
 
 # If you use npm
 npm install
@@ -23,10 +23,9 @@ Finally, install the [Flex Plugin extension](https://github.com/twilio-labs/plug
 
 ```bash
 twilio plugins:install @twilio-labs/plugin-flex@beta
-# create new plugin
-twilio flex:plugins:create plugin-state-warning --install
 ```
-twilio flex:plugins:create plugin-interface --install
+
 ## Development
 
 Run `twilio flex:plugins --help` to see all the commands we currently support. For further details on Flex Plugins refer to our documentation on the [Twilio Docs](https://www.twilio.com/docs/flex/developer/plugins/cli) page.
+
