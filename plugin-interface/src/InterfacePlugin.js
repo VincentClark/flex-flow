@@ -1,6 +1,8 @@
 import React from 'react';
 import { VERSION } from '@twilio/flex-ui';
 import { FlexPlugin } from 'flex-plugin';
+import FeatherTheme from './FeatherCorpTheme';
+
 
 import CustomTaskListContainer from './components/CustomTaskList/CustomTaskList.Container';
 import reducers, { namespace } from './states';
@@ -24,19 +26,20 @@ export default class InterfacePlugin extends FlexPlugin {
     this.registerReducers(manager);
     const options = { sortOrder: -1 };
     // config
-    const configuration = {
-      colorTheme: {
-        baseName: "FlexLight",
-      }
+    //https://fsassets-9880.twil.io/fakestore.png https://fsassets-9880.twil.io/fslogo.svg
+    // const configuration = {
+    //   colorTheme: {
+    //     baseName: "FlexLight",
+    //   }
+    // };
 
-    };
-    manager.updateConfig(configuration);
-    // remove pannel 2
+    flex.MainHeader.defaultProps.logoUrl =
+      "https://tangerine-toad-5117.twil.io/assets/feathercorp-logo-white.svg"
+    manager.updateConfig({ colorTheme: FeatherTheme });
+
+    //manager.updateConfig(configuration);
+    //https://fsassets-9880.twil.io/fslogo.svg
     flex.AgentDesktopView.Panel2.Content.remove();
-
-
-
-
 
   }
 
