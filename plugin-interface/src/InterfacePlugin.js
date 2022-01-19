@@ -2,10 +2,9 @@ import React from 'react';
 import { VERSION } from '@twilio/flex-ui';
 import { FlexPlugin } from 'flex-plugin';
 import FeatherTheme from './FeatherCorpTheme';
-
-
-import CustomTaskListContainer from './components/CustomTaskList/CustomTaskList.Container';
+import QuoteComponent from './components/Quote/Quote';
 import reducers, { namespace } from './states';
+import TimeTheme from './components/TimeTheme/TimeTheme';
 
 const PLUGIN_NAME = 'InterfacePlugin';
 
@@ -32,15 +31,22 @@ export default class InterfacePlugin extends FlexPlugin {
     //     baseName: "FlexLight",
     //   }
     // };
+    //flex.AgentDesktopView.Panel1.Content.add(<CustomTaskListContainer key="FlextwoSmsoutboundPlugin-component" />, options);
 
     flex.MainHeader.defaultProps.logoUrl =
       "https://tangerine-toad-5117.twil.io/assets/feathercorp-logo-white.svg"
     manager.updateConfig({ colorTheme: FeatherTheme });
 
-    //manager.updateConfig(configuration);
-    //https://fsassets-9880.twil.io/fslogo.svg
-    flex.AgentDesktopView.Panel2.Content.remove();
-
+    //remove interface compontents
+    flex.NoTasksCanvas.Content.remove('first-line');
+    flex.NoTasksCanvas.Content.remove('second-line');
+    flex.NoTasksCanvas.Content.remove('hint');
+    flex.NoTasksCanvas.Content.add(<QuoteComponent key="qotd" />, {
+      sortOrder: -1
+    });
+    flex.NoTasksCanvas.Content.add(<TimeTheme key="timeTheme" />, {
+      sortOrder: -1
+    });
   }
 
   /**
