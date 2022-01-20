@@ -1,7 +1,7 @@
 import React from 'react';
 import { VERSION } from '@twilio/flex-ui';
 import { FlexPlugin } from 'flex-plugin';
-import FeatherTheme from './FeatherCorpTheme';
+import FeatherTheme from './components/TimeTheme/FeatherCorpTheme';
 import QuoteComponent from './components/Quote/Quote';
 import reducers, { namespace } from './states';
 import TimeTheme from './components/TimeTheme/TimeTheme';
@@ -35,7 +35,7 @@ export default class InterfacePlugin extends FlexPlugin {
 
     flex.MainHeader.defaultProps.logoUrl =
       "https://tangerine-toad-5117.twil.io/assets/feathercorp-logo-white.svg"
-    manager.updateConfig({ colorTheme: FeatherTheme });
+    //manager.updateConfig({ colorTheme: FeatherTheme });
 
     //remove interface compontents
     flex.NoTasksCanvas.Content.remove('first-line');
@@ -44,7 +44,7 @@ export default class InterfacePlugin extends FlexPlugin {
     flex.NoTasksCanvas.Content.add(<QuoteComponent key="qotd" />, {
       sortOrder: -1
     });
-    flex.NoTasksCanvas.Content.add(<TimeTheme key="timeTheme" />, {
+    flex.NoTasksCanvas.Content.add(<TimeTheme key="timeTheme" manager={manager} />, {
       sortOrder: -1
     });
   }
