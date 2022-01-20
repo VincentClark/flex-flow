@@ -1,5 +1,5 @@
 {
-  "name": "plugin-interface",
+  "name": "plugin-daytime",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -7,15 +7,12 @@
     "start": "twilio flex:plugins:start"
   },
   "dependencies": {
-    "axios": "^0.24.0",
-    "flex-plugin-scripts": "4.2.2",
-    "qs": "^6.10.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "twilio": "^3.72.0"
+    "flex-plugin-scripts": "^4.3.0",
+    "react": "16.5.2",
+    "react-dom": "16.5.2"
   },
   "devDependencies": {
     "@twilio/flex-ui": "^1",
-    "react-test-renderer": "16.13.1"
+    "react-test-renderer": "16.5.2"
   }
 }

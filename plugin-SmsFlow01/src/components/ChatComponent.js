@@ -19,6 +19,7 @@ const ChatComponent = () => {
 
     // Handlers
 
+
     const handleMessageChange = (e) => {
         setMessage(e.target.value);
     }

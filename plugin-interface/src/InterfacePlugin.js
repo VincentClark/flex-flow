@@ -22,8 +22,8 @@ export default class InterfacePlugin extends FlexPlugin {
    */
   //flex.AgentDesktopView.Panel1.Content.add(<CustomTaskListContainer key="FlextwoSmsoutboundPlugin-component" />, options);
   async init(flex, manager) {
-    this.registerReducers(manager);
-    const options = { sortOrder: -1 };
+    //this.registerReducers(manager);
+
     // config
     //https://fsassets-9880.twil.io/fakestore.png https://fsassets-9880.twil.io/fslogo.svg
     // const configuration = {
