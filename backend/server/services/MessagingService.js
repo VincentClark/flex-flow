@@ -135,11 +135,7 @@ class MessagingService {
                 .sessions
                 .create({
                     uniqueName: `${channel.sid}`,
-                    participants: [{
-                        'identifier': `${channel.sid}`,
-                        'proxyIdentifier': `+${fromNumber}`,
-                        'friendlyName': friendlyName
-                    }],
+                    participants: [{ 'identifier': `${channel.sid}`, 'proxyIdentifier': `+${fromNumber}`, 'friendlyName': friendlyName }],
                     mode: 'message-only'
                 })
         console.log("ProxySid-3", proxySession.sid);

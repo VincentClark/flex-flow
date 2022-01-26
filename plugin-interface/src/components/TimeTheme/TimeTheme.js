@@ -51,9 +51,60 @@ const TimeTheme = ({ key, manager }) => {
         setDeBug([sunsetDate.getTime(), time.getTime(), time.getTime() - sunsetDate.getTime()]);
         return sunsetDate;
     }
+    /*
+    START NEW CODE
+    */
+    const nDate = (time) => {
+        let sunriseTime = time.split(':');
+        let sunriseHour = parseInt(sunriseTime[0]);
+        console.log("Hour: " + sunriseHour);
+        let sunriseMinute = parseInt(sunriseTime[1]);
+        const meridian = sunriseTime[2].split(' ');
+        const fakeDate = new Date();
+        if (meridian[1] === 'PM') {
+            sunriseHour += 12;
+        }
+        const retDate = new Date(Date.UTC(fakeDate.getFullYear(), fakeDate.getMonth(), fakeDate.getUTCDate(), sunriseHour, sunriseMinute, 0, 0));
+
+        return retDate;
+    }
+    const ssDate = (time) => {
+        //sunrise time
+        let sunriseTime = time.split(':');
+        let sunriseHour = parseInt(sunriseTime[0]);
+        console.log("Sunrise Hour: " + sunriseHour);
+        let sunriseMinute = parseInt(sunriseTime[1]);
+        const meridian = sunriseTime[2].split(' ');
+        const fakeDate = new Date();
+        if (meridian[1] === 'PM') {
+            sunriseHour += 12;
+        }
+        const retDate = new Date(Date.UTC(fakeDate.getFullYear(), fakeDate.getMonth(), fakeDate.getUTCDate() + 1, sunriseHour, sunriseMinute, 0, 0));
+
+        return retDate;
+    }
+    const qDate = () => {
+        const nowDate = new Date();
+        const nowDateUTC = new Date(Date.UTC(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), nowDate.getHours(), nowDate.getMinutes(), nowDate.getSeconds(), nowDate.getMilliseconds()));
+        return nowDate;
+    }
+    // const sunsetXDate = ssDate(results.sunset);
+    // const sunriseXDate = nDate(results.sunrise);
+    // const nowxDate = qDate();
+
+
+
+    /*
+    END NEW CODE
+
+    */
     const findSunrise = (sunny) => {
         const sunriseTime = sunny.results.sunrise.split(':');
-        const sunriseHour = parseInt(sunriseTime[0]);
+        const sunriseHour = parseInt(sunriseTime[0] - offset);
+        if (sunny.results.sunrise.indexOf("PM") > -1) {
+            const sunriseHour = parseInt(sunriseTime[0]);
+        }
+
         const sunriseMinute = parseInt(sunriseTime[1]);
         const sunriseOffset = sunriseHour - offset;
         const sunriseDate = new Date(time.getFullYear(), time.getMonth(), time.getDate(), sunriseOffset, sunriseMinute);
@@ -63,18 +114,19 @@ const TimeTheme = ({ key, manager }) => {
         // else {
         //     setIsItSunset(true);
         // }
-        setDeBugRise([sunriseDate.getTime(), time.getTime(), time.getTime() - sunriseDate.getTime()]);
+        setDeBugRise([`Sunrise ${sunriseDate.getHours()} : ${sunriseDate.getMinutes()}`, `Now ${time.getHours()} : ${time.getMinutes()}`, `Sunset: ${sunsetDate.getHours()}:${sunsetDate.getMinutes()}`]);
         return sunriseDate;
     }
     //rename this function
     const getSunset = async (local) => {
         const response = await axios.get(`https://api.sunrise-sunset.org/json?lat=${local.latitude}&lng=${local.longitude}&date=today`);
         //  onlt really need *date
-        setSunset(response.data);
-        setSunrise(findSunrise(response.data));
-        setSunsetDate(findSunset(response.data));
-        setSunriseDate(findSunrise(response.data));
-        if (sunsetDate.getTime() <= time.getTime() && sunriseDate.getTime() >= time.getTime()) {
+        //https://api.sunrise-sunset.org/json?lat=34.1624&lng=-118.1275&date=today
+        setSunsetDate(ssDate((response.data.results.sunset)));
+        setSunriseDate(nDate(response.data.results.sunrise));
+        // setSunsetDate(ssDate(response.results.sunset));
+        // setSunriseDate(nDate(response.results.sunrise));
+        if (qDate().getTime() < sunsetDate.getTime()) {
             setIsItDay(true);
             manager.updateConfig({ colorTheme: FeatherTheme });
         }
@@ -106,8 +158,8 @@ const TimeTheme = ({ key, manager }) => {
         setInterval(() => {
             setTime(new Date());
             if (isItDay === true) {
-                manager.updateConfig({ colorTheme: FeatherTheme });
-                setDeBug([isItDay])
+                // manager.updateConfig({ colorTheme: FeatherTheme });
+                // setDeBug([isItDay])
             }
         }, 1000);
     }, []);
@@ -124,25 +176,17 @@ const TimeTheme = ({ key, manager }) => {
                 }
             </p>
             <p>
-                {
-                    sunset ? `SUNSET ${sunsetDate.getHours()}  ${sunsetDate.getMinutes()}` : null
-                }
+
 
             </p>
             <p>
-                {
-                    isItDay ? `It is day` : `It is night`
-                }
+
             </p>
             <p>
-                {
-                    deBug ? `Sunset Difference: ${deBug[0]} >= ${deBug[1]} || ${deBug[2]}` : null
-                }
+
             </p>
             <p>
-                {
-                    deBug ? `Sunrise Difference: ${deBugRise[0]} <= ${deBugRise[1]} || ${deBugRise[2]}` : null
-                }
+
             </p>
         </div>
     )
