@@ -17,6 +17,8 @@ const TimeTheme = ({ key, manager }) => {
     const [dayLength, setDayLength] = useState(null);
     const [sunSetTime, setSunSetTime] = useState(new Date());
     const [isDayTime, setIsDayTime] = useState(false);
+    const [timeAdjustHour, setTimeAdjustHour] = useState(0);
+    const [timeAdjustMinute, setTimeAdjustMinute] = useState(0);
 
 
     //get lattitude and longitude
@@ -43,7 +45,6 @@ const TimeTheme = ({ key, manager }) => {
                 sunSetTime.setTime(sunset);
                 setSunSetTime(sunSetTime);
                 console.log("debug", sunSetTime)
-                triggerProcess();
                 if (currentTime.getTime() < sunSetTime.getTime()) {
                     setIsDayTime(true);
                     manager.updateConfig({ colorTheme: FeatherTheme });
@@ -55,14 +56,13 @@ const TimeTheme = ({ key, manager }) => {
             }
             )
         //  onlt really need *date
-
-
-
     }
     function triggerProcess() {
+        console.log("DEBUG UseState", currentTime, sunSetTime);
         if (currentTime.getTime() < sunSetTime.getTime()) {
-            setIsDayTime(false);
+            setIsDayTime(true);
             console.log("DEBUG DAYTIME", isDayTime)
+
             manager.updateConfig({ colorTheme: FeatherTheme });
         } else {
             console.log("DEBUG NOTDAYTIME", currentTime, sunSetTime)
@@ -97,10 +97,6 @@ const TimeTheme = ({ key, manager }) => {
         setDayLength(dayLength);
         return dayLength;
     }
-
-
-
-
     //moment js
 
     useEffect(() => {
@@ -118,6 +114,9 @@ const TimeTheme = ({ key, manager }) => {
     const myName = "Vincent"
     return (
         <div>
+            <div>
+                <button onClick={() => { triggerProcess() }}>TEST</button>
+            </div>
             <p>
                 {
                     location ? `Lattitude: ${location.latitude} || Longitude: ${location.longitude}` : null
@@ -142,7 +141,10 @@ const TimeTheme = ({ key, manager }) => {
                 DEBUG {debug[0]} and {debug[1]} and sunset time
             </p>
             <p>
-                Is Daylight {isDayTime}
+                Is Daylight:
+                {
+                    isDayTime ? "true" : "false"
+                }
             </p>
             <p>
                 {sunApiData.results ? `Sunrise: ${sunApiData.results.sunrise}` : null}
