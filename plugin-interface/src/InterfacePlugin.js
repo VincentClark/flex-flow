@@ -47,6 +47,8 @@ export default class InterfacePlugin extends FlexPlugin {
     flex.NoTasksCanvas.Content.add(<TimeTheme key="timeTheme" manager={manager} />, {
       sortOrder: -1
     });
+
+
   }
 
   /**

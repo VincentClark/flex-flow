@@ -34,6 +34,7 @@ const nDate = (time) => {
 
     return retDate;
 }
+
 const ssDate = (time) => {
     //sunrise time
     let sunriseTime = time.split(':');

@@ -11,7 +11,8 @@ const TimeTheme = ({ key, manager }) => {
     const [currentTime, setCurrentTime] = useState(new Date());
     const [debug, setDebug] = useState([]);
     const [apiData, setApiData] = useState({});
-    const [sunset, setSunset] = useState(null);
+    const [sunApiData, setSunApiData] = useState({});
+    const [sunsetX, setSunsetX] = useState(null);
     const [sunrise, setSunrise] = useState(null);
     const [dayLength, setDayLength] = useState(null);
     const [sunSetTime, setSunSetTime] = useState(new Date());
@@ -27,27 +28,46 @@ const TimeTheme = ({ key, manager }) => {
     }
 
     const sunSetSunRiseApi = async (local) => {
-        const response = await axios.get(`https://api.sunrise-sunset.org/json?lat=${local.latitude}&lng=${local.longitude}&date=today`);
+        const response = await axios.get(`https://api.sunrise-sunset.org/json?lat=${local.latitude}&lng=${local.longitude}&date=today`)
+            .then(response => {
+                console.log("DEBUGHIT", response.data);
+                setSunApiData(response.data);
+                const processedSunRise = processSunRise(response.data.results.sunrise)
+                setDayLength(response.data.results.day_length);
+                //https://api.sunrise-sunset.org/json?lat=34.1624&lng=-118.1275&date=today
+                // triggerProcess();
+                const dayLength = processDayLength(response.data.results.day_length);
+                const sunset = processedSunRise + dayLength;
+                setSunsetX(sunset);
+                let sunSetTime = new Date();
+                sunSetTime.setTime(sunset);
+                setSunSetTime(sunSetTime);
+                console.log("debug", sunSetTime)
+                triggerProcess();
+                if (currentTime.getTime() < sunSetTime.getTime()) {
+                    setIsDayTime(true);
+                    manager.updateConfig({ colorTheme: FeatherTheme });
+                } else {
+                    setIsDayTime(false);
+                }
+                //triggerProcess();
+                return response.data;
+            }
+            )
         //  onlt really need *date
-        console.log("DEBUGHIT", response.data);
-        setApiData(response.data);
-        const processedSunRise = processSunRise(response.data.results.sunrise)
-        setDayLength(response.data.results.day_length);
-        //https://api.sunrise-sunset.org/json?lat=34.1624&lng=-118.1275&date=today
-        const dayLength = processDayLength(response.data.results.day_length);
-        const sunset = processedSunRise + dayLength;
-        let sunSetTime = new Date();
-        sunSetTime.setTime(sunset);
-        setSunSetTime(sunSetTime);
-        if (currentTime.getTime() < sunSetTime) {
-            setIsDayTime(true);
+
+
+
+    }
+    function triggerProcess() {
+        if (currentTime.getTime() < sunSetTime.getTime()) {
+            setIsDayTime(false);
+            console.log("DEBUG DAYTIME", isDayTime)
             manager.updateConfig({ colorTheme: FeatherTheme });
         } else {
+            console.log("DEBUG NOTDAYTIME", currentTime, sunSetTime)
             setIsDayTime(false);
         }
-
-
-        return response.data;
     }
     function processSunRise(timeSunRise) {
         let time = new Date();
@@ -73,9 +93,7 @@ const TimeTheme = ({ key, manager }) => {
         const minute = parseInt(timeLengthArray[1]);
         //combine hours and minutes to miliseconds
         const dayLength = (hour * 60 * 60 * 1000) + (minute * 60 * 1000);
-
         setDebug([dayLength, hour, minute]);
-
         setDayLength(dayLength);
         return dayLength;
     }
@@ -121,10 +139,14 @@ const TimeTheme = ({ key, manager }) => {
                 dayLength: {dayLength}
             </p>
             <p>
-                DEBUG {debug[0]} and {debug[1]}
+                DEBUG {debug[0]} and {debug[1]} and sunset time
             </p>
             <p>
                 Is Daylight {isDayTime}
+            </p>
+            <p>
+                {sunApiData.results ? `Sunrise: ${sunApiData.results.sunrise}` : null}
+
             </p>
         </div>
     )
