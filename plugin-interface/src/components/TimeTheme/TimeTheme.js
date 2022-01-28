@@ -52,6 +52,7 @@ const TimeTheme = ({ key, manager }) => {
                     setIsDayTime(false);
                 }
                 //triggerProcess();
+                //testing
                 // console.log("sunrise", sunrise);
                 return response.data;
             }
