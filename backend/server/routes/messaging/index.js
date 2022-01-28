@@ -27,6 +27,10 @@ module.exports = (params) => {
         console.log("messagingInfo", messagingInfo)
         res.status(200).json({ 'messagingInfo': messagingInfo });
     })
+    router.get('/create-whatsapp-channel', (req, res) => {
+        const messagingInfo = messaging.createWhatsAppChannel();
+        console.log("messagingInfo", messagingInfo)
+    })
     router.post('/create-task', async (req, res) => {
         const { fromNumber, toNumber, friendlyName, message } = req.body;
         console.log('create-task');
