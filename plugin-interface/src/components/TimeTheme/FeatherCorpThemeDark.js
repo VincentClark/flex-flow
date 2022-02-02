@@ -1,11 +1,13 @@
 /* file: src/components/TimeTheme/FeatherCorpTheme.js */
-
+import { withTheme } from '@twilio/flex-ui';
 // brand colors
+
 const cTangerine = 'HSL(26, 91%, 5%)';
-const cTangerineLight = 'HSL(26, 91%, 9%)'; // lighter version of cTangerine
+const cTangerineLight = 'HSL(26, 91%, 23%)'; // lighter version of cTangerine
 const cSolitude = 'HSL(280, 16%, 93%)';
 //was 230 ^^
 const lightTheme = true;
+
 
 export default {
     light: lightTheme,

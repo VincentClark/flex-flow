@@ -4,7 +4,8 @@ import FeatherTheme from './FeatherCorpTheme';
 import FeatherThemeDark from './FeatherCorpThemeDark';
 const axios = require('axios');
 
-
+// well you earned it, and while napping think of cool ways to integrate crypto into flex. 
+// best to get a bottle of roses first. 
 const TimeTheme = ({ key, manager }) => {
 
     //const adjust = 0;
@@ -23,7 +24,16 @@ const TimeTheme = ({ key, manager }) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [timeUntilSunset, setTimeUntilSunset] = useState(null);
 
-
+    const [cTangerine, setCTangerin] = useState('HSL(26, 91, 5)');
+    const [ctH, setCTH] = useState(26);
+    const [ctS, setCTS] = useState(91);
+    const [ctL, setCTL] = useState(5);
+    const [csH, setCSH] = useState(280);
+    const [csS, setCSS] = useState(16);
+    const [csL, setCSL] = useState(93);
+    const [cTangerineLight, setCTangerinLight] = useState('HSL(26, 91%, 23%)'); // lighter version of cTangerine
+    const [cSolitude, setCSolitude] = useState('HSL(280, 16%, 93%)');
+    const [lightTheme, setLightTheme] = useState(true);
 
     //get lattitude and longitude
     const getLocation = async () => {
@@ -100,13 +110,75 @@ const TimeTheme = ({ key, manager }) => {
                 setIsDayTime(true);
                 console.log("DEBUG DAYTIME", isDayTime)
                 console.log("DEBUG DIF", sunSetTime.getTime() - currentTime.getTime())
-                manager.updateConfig({ colorTheme: FeatherTheme });
+                manager.updateConfig({
+                    colorTheme: {
+                        light: lightTheme,
+                        baseName: 'GreyLight',
+                        // base theme colors
+                        colors: {
+                            tabSelectedColor: `HSL(${ctH}, ${ctS}, ${ctL})`,
+                            focusColor: `HSL(${ctH}, ${ctS}, ${ctL})`,
+                            completeTaskColor: `HSL(${ctH}, ${ctS}, ${ctL})`,
+                            defaultButtonColor: `HSL(${ctH}, ${ctS}, ${ctL})`,
+                            flexBlueColor: `HSL(${ctH}, ${ctS}, ${ctL})`,
+                        },
+
+                        // component overrides
+                        overrides: {
+
+                            // top header
+                            MainHeader: {
+                                Container: {
+                                    background: `HSL(${ctH}, ${ctS}, ${ctL})`,
+                                    color: `HSL(${csH}, ${csS}, ${csL})`,
+                                }
+                            },
+
+                            // left sidebar
+                            SideNav: {
+                                Container: {
+                                    background: `HSL(${csH}, ${csS}, ${csL})`,
+                                    color: `HSL(${ctH}, ${ctS}, ${ctL})`,
+                                },
+                                Button: {
+                                    background: `HSL(${csH}, ${csS}, ${csL})`,
+                                    color: `HSL(${ctH}, ${ctS}, ${ctL})`,
+                                    lightHover: !lightTheme
+                                },
+                                Icon: {
+                                    color: `HSL(${csH}, ${csS}, ${csL})`,
+                                }
+                            },
+
+                            // admin plugin
+                            FlexAdmin: {
+                                DashboardCard: {
+                                    Icon: {
+                                        backgroundColor: cTangerineLight
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                });
             } else {
                 console.log("DEBUG NOTDAYTIME", currentTime, sunSetTime)
                 manager.updateConfig({ colorTheme: FeatherThemeDark });
                 setIsDayTime(false);
             }
+
         }
+    }
+    function msToTime(ms) {
+        let seconds = (ms / 1000).toFixed(1);
+        let minutes = (ms / (1000 * 60)).toFixed(1);
+        let hours = (ms / (1000 * 60 * 60)).toFixed(1);
+        let days = (ms / (1000 * 60 * 60 * 24)).toFixed(1);
+        if (seconds < 60) return seconds + " Sec";
+        else if (minutes < 60) return minutes + " Min";
+        else if (hours < 24) return hours + " Hrs";
+        else return days + " Days"
     }
     //moment js
     useEffect(() => {
