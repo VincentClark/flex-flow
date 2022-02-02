@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { withTheme } from '@twilio/flex-ui';
 import FeatherTheme from './FeatherCorpTheme';
+import FeatherThemeDark from './FeatherCorpThemeDark';
 const axios = require('axios');
 
 
@@ -19,6 +20,9 @@ const TimeTheme = ({ key, manager }) => {
     const [isDayTime, setIsDayTime] = useState(false);
     const [timeAdjustHour, setTimeAdjustHour] = useState(0);
     const [timeAdjustMinute, setTimeAdjustMinute] = useState(0);
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [timeUntilSunset, setTimeUntilSunset] = useState(null);
+
 
 
     //get lattitude and longitude
@@ -50,6 +54,7 @@ const TimeTheme = ({ key, manager }) => {
                     manager.updateConfig({ colorTheme: FeatherTheme });
                 } else {
                     setIsDayTime(false);
+                    manager.updateConfig({ colorTheme: FeatherThemeDark });
                 }
                 //triggerProcess();
                 return response.data;
@@ -57,18 +62,7 @@ const TimeTheme = ({ key, manager }) => {
             )
         //  onlt really need *date
     }
-    function triggerProcess() {
-        console.log("DEBUG UseState", currentTime, sunSetTime);
-        if (currentTime.getTime() < sunSetTime.getTime()) {
-            setIsDayTime(true);
-            console.log("DEBUG DAYTIME", isDayTime)
 
-            manager.updateConfig({ colorTheme: FeatherTheme });
-        } else {
-            console.log("DEBUG NOTDAYTIME", currentTime, sunSetTime)
-            setIsDayTime(false);
-        }
-    }
     function processSunRise(timeSunRise) {
         let time = new Date();
         const sunriseTime = timeSunRise.split(':');
@@ -80,7 +74,7 @@ const TimeTheme = ({ key, manager }) => {
         }
         sunriseHour = sunriseHour - time.getTimezoneOffset() / 60;
         //ADD TESTING HERE TO SEE IF IT IS DAY OR NIGHT
-        let sunDate = new Date(time.getFullYear(), time.getMonth(), time.getDate(), sunriseHour, sunriseMinute);
+        let sunDate = new Date(time.getFullYear(), time.getMonth(), time.getDate(), sunriseHour, sunriseMinute, 0, 0);
         time.setTime(sunDate.getTime());
 
         setSunrise(sunDate);
@@ -97,7 +91,27 @@ const TimeTheme = ({ key, manager }) => {
         setDayLength(dayLength);
         return dayLength;
     }
+    function triggerProcess() {
+        if (isLoaded) {
+            console.log("DEBUG UseState", currentTime, sunSetTime);
+            //console.log("DEBUG tempDate", tempDate);
+            const adj = timeAdjustHour * 60 + timeAdjustMinute;
+            if (currentTime.getTime() < sunSetTime.getTime()) {
+                setIsDayTime(true);
+                console.log("DEBUG DAYTIME", isDayTime)
+                console.log("DEBUG DIF", sunSetTime.getTime() - currentTime.getTime())
+                manager.updateConfig({ colorTheme: FeatherTheme });
+            } else {
+                console.log("DEBUG NOTDAYTIME", currentTime, sunSetTime)
+                manager.updateConfig({ colorTheme: FeatherThemeDark });
+                setIsDayTime(false);
+            }
+        }
+    }
     //moment js
+    useEffect(() => {
+        setIsLoaded(true);
+    }, [isLoaded])
 
     useEffect(() => {
         getLocation()
@@ -106,12 +120,15 @@ const TimeTheme = ({ key, manager }) => {
                 console.log(apiData);
             })
     }, [])
+    //have date increment by 1 every second
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentTime(new Date());
+            triggerProcess();
+        }, 5000);
+        return () => clearInterval(interval);
+    }, [currentTime]);
 
-
-
-
-
-    const myName = "Vincent"
     return (
         <div>
             <div>
@@ -128,6 +145,11 @@ const TimeTheme = ({ key, manager }) => {
                     apiData.results ? `Sunrise: ${sunrise}` : null
                 }
 
+            </p>
+            <p>
+                SunSet Date : {
+                    sunSetTime ? `${sunSetTime.toLocaleTimeString()}` : null
+                }
             </p>
             <p>
                 {
@@ -149,6 +171,11 @@ const TimeTheme = ({ key, manager }) => {
             <p>
                 {sunApiData.results ? `Sunrise: ${sunApiData.results.sunrise}` : null}
 
+            </p>
+            <p>
+                {
+                    currentTime ? `Current Time: ${currentTime}` : null
+                }
             </p>
         </div>
     )

@@ -1,8 +1,8 @@
 /* file: src/components/TimeTheme/FeatherCorpTheme.js */
 
 // brand colors
-const cTangerine = 'HSL(26, 91%, 55%)';
-const cTangerineLight = 'HSL(26, 91%, 93%)'; // lighter version of cTangerine
+const cTangerine = 'HSL(26, 91%, 5%)';
+const cTangerineLight = 'HSL(26, 91%, 9%)'; // lighter version of cTangerine
 const cSolitude = 'HSL(280, 16%, 93%)';
 //was 230 ^^
 const lightTheme = true;

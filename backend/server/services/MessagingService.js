@@ -44,28 +44,6 @@ class MessagingService {
                 return flex_flow.sid
             })
     }
-    async createWhatsAppChannel() {
-        const flexFlowSid = this.flex_flow_sid_a;
-        const channel = await this.client.flexApi.channel.create({
-            flexFlowSide: flexFlowSid,
-            ChannelType: "whatsapp",
-            Enabled: true,
-            janitorEnabled: true,
-            integrationType: "studio",
-            contactIdentity: "+14153389812",
-            FriendlyName: "Flex WhatsApp FlexFlow",
-            "Intigration.FlowSid": "FW97ae06f848fcdead3b95bae616242fed",
-            ChatServiceSid: "IS597deeeb66804aea8b33f23aed221bdc"
-        })
-            .then(channel => {
-                console.log("channel", channel);
-                this.channel_sid = channel.sid;
-                return (channel.sid);
-            }).catch(err => {
-                console.log("ERROR", err)
-            })
-    }
-
     async createTask(attributes = { '1': '1' }) {
         const taskSid = await this.client.taskrouter.workspaces(this.workspace_sid).tasks.create({
             workflowSid: this.workflow_sid,
@@ -203,7 +181,7 @@ class MessagingService {
             autoAnswer: 'true'
         }
         const channel = await this.client.flexApi.channel.create({
-            target: `+${fromNumber}`,
+            target: `+${toNumber}`,
             taskAttributes: JSON.stringify(taskAttributes),
             identity: `sms_${fromNumber}`,
             chatFriendlyName: `chat user ${friendlyName}`,
