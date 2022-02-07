@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 import { reduce as CustomTaskListReducer } from './CustomTaskListState';
 
 // Register your redux store under a unique namespace
-export const namespace = 'daytime';
+export const namespace = 'recordcontrols';
 
 // Combine the reducers
 export default combineReducers({

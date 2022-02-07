@@ -5,7 +5,7 @@ import { Actions } from '../../states/CustomTaskListState';
 import CustomTaskList from './CustomTaskList';
 
 const mapStateToProps = (state) => ({
-  isOpen: state['daytime'].customTaskList.isOpen,
+  isOpen: state['recordcontrols'].customTaskList.isOpen,
 });
 
 const mapDispatchToProps = (dispatch) => ({
