@@ -1,5 +1,5 @@
 import * as FlexPlugin from 'flex-plugin';
 
-import RecordControlsPlugin from './RecordControlsPlugin';
+import RecordcontrolsPlugin from './RecordcontrolsPlugin';
 
-FlexPlugin.loadPlugin(RecordControlsPlugin);
+FlexPlugin.loadPlugin(RecordcontrolsPlugin);

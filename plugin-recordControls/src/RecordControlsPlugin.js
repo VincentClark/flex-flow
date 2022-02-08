@@ -19,7 +19,7 @@ export default class RecordControlsPlugin extends FlexPlugin {
   init(flex, manager) {
     // Add component to top of TaskInfoPanel only for voice calls
     flex.TaskInfoPanel.Content.add(
-      <RecordControlsComponent key="demo-record-controls-component" />,
+      <RecordControlsComponent key="demo-record-controls-component" serviceBaseUrl='https://recording-5185.twil.io/' />,
       {
         sortOrder: -1,
         if: props => props.task.source.taskChannelUniqueName === "voice"

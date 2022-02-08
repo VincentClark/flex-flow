@@ -1,5 +1,5 @@
 {
-  "name": "plugin-recordControls",
+  "name": "plugin-recordcontrols",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -8,9 +8,11 @@
   },
   "dependencies": {
     "flex-plugin-scripts": "4.3.1",
-    "react": "^16.5.2",
+    "react": "16.5.2",
     "react-dom": "16.5.2",
-    "react-emotion": "9.2.12"
+    "react-emotion": "9.2.12",
+    "redux": "^3.7.2",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "@twilio/flex-ui": "^1",

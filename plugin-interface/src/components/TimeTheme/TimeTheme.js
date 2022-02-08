@@ -41,6 +41,12 @@ const TimeTheme = ({ key, manager }) => {
     const [lightTheme, setLightTheme] = useState(true);
     const [sunShiftHour, setSunShiftHour] = useState(0);
     const [sunShiftMinute, setSunShiftMinute] = useState(0);
+    const [debugDiff, setDebugDiff] = useState(0);
+    //weather information
+    const [weatherData, setWeatherData] = useState(null);
+    const [weatherCondition, setWeatherCondition] = useState(null);
+    const [weatherTemp, setWeatherTemp] = useState(null);
+    const [weatherTempHigh, setWeatherTempHigh] = useState(null);
 
     //get lattitude and longitude
     const getLocation = async () => {
@@ -49,9 +55,18 @@ const TimeTheme = ({ key, manager }) => {
         setLocation(response.data);
         return response.data;
     }
+    const weatherApi = async (local) => {
+        //put api key into env variable and use it here
+        const response = await axios.get(`https://api.weatherapi.com/v1/current.json?key=83b93cfd8523492ca26194608220802&q=${local.latitude},${local.longitude}&appid=b1b15e88fa797225412429c1c50c122a1`);
+        //https://api.weatherapi.com/v1/current.json?key=83b93cfd8523492ca26194608220802&q=34.1624,-118.1275&appid=b1b15e88fa797225412429c1c50c122a1
+        console.log("DEBUG WEATHERAPI RESPONSE", response)
+        //may be duplicate sets here. 
+        setWeatherData(response.data);
+        return response.data;
+    }
 
     const sunSetSunRiseApi = async (local) => {
-        const response = await axios.get(`https://api.sunrise-sunset.org/json?lat=${local.latitude}&lng=${local.longitude}&date=today`)
+        const response = await axios.get(`https://api.sunrise-sunset.org/json?${local.latitude},${local.longitude}&date=today`)
             .then(response => {
                 console.log("DEBUGHIT", response.data);
                 setSunApiData(response.data);
@@ -74,7 +89,7 @@ const TimeTheme = ({ key, manager }) => {
                     manager.updateConfig({ colorTheme: FeatherThemeDark });
                 }
                 //triggerProcess();
-                return response.data;
+                return [response.data, local];
             }
             )
         //  onlt really need *date
@@ -119,12 +134,24 @@ const TimeTheme = ({ key, manager }) => {
             let arby = (sunSetTime.getTime() - currentTime) / 10000000
             if (sunSetTime.getTime() - currentTime.getTime() <= 1000000) {
                 console.log("DEBUG ARBY", arby);
+                setDebugDiff(sunsetDiff / 1000000);
 
                 //place mins here
-                setCTL(33);
-                setCSH(33 - 1);
-                setCSS(csS - 1);
-                setCSL(csL - 1);
+                //need to wrap these in a second set of variables.
+                let ctlPercent = 55 * debugDiff;
+                let ctsPercent = 91 * debugDiff;
+                let cssPercent = 16 * debugDiff;
+                let clsPercent = 93 * debugDiff;
+                (ctlPercent > 5) ? setCTL(ctlPercent) : setCTL(5);
+                // if (ctsPercent > 45) setCTS(ctsPercent)
+                //if (cssPercent > 16) setCSS(cssPercent)
+                if (clsPercent > 80) setCSL(clsPercent)
+
+                // setCTL(55 * debugDiff);
+                // setCTS(91 * debugDiff);
+                // // setCSH(csH * debugDiff);
+                // setCSS(16 * debugDiff);
+                // setCSL(93 * debugDiff);
                 manager.updateConfig({
                     colorTheme: {
                         light: lightTheme,
@@ -173,9 +200,7 @@ const TimeTheme = ({ key, manager }) => {
                         }
                     }
                 });
-            }
-
-            if (currentTime.getTime() < sunSetTime.getTime()) {
+            } else if (currentTime.getTime() < sunSetTime.getTime()) {
                 setIsDayTime(true);
                 console.log("DEBUG DAYTIME", isDayTime)
                 manager.updateConfig({ colorTheme: FeatherTheme });
@@ -194,15 +219,21 @@ const TimeTheme = ({ key, manager }) => {
             console.log("DEBUG UseState", currentTime, sunSetTime);
             //console.log("DEBUG tempDate", tempDate);
             const adj = timeAdjustHour * 60 + timeAdjustMinute;
+            if (sunSetTime.getTime() - currentTime.getTime() < 273052 && ctL >= 30) {
+                setCTL(ctL - 5);
+                setCSH(csH - 10);
+                setCSS(csS - 10);
+                setCSL(csL - 10);
+
+            }
             if (currentTime.getTime() < sunSetTime.getTime()) {
                 setIsDayTime(true);
                 console.log("DEBUG DAYTIME", isDayTime)
                 console.log("DEBUG DIF", sunSetTime.getTime() - currentTime.getTime())
                 console.log("DEBUG msToTime", msToTime(sunSetTime.getTime() - currentTime.getTime()))
                 //273052 6 minutes
-                if (sunSetTime.getTime() - currentTime.getTime() < 273052 && ctL >= 30) {
-                    setCTL(ctL - 5);
-                }
+
+
 
                 manager.updateConfig({
                     colorTheme: {
@@ -223,7 +254,7 @@ const TimeTheme = ({ key, manager }) => {
                             // top header
                             MainHeader: {
                                 Container: {
-                                    background: `HSL(155, ${ctS}%, ${ctL}%)`,
+                                    background: `HSL(${csH}, ${ctS}%, ${ctL}%)`,
                                     color: `HSL(${csH}, ${csS}%, ${csL}%)`,
                                 }
                             },
@@ -282,8 +313,15 @@ const TimeTheme = ({ key, manager }) => {
     useEffect(() => {
         getLocation()
             .then(local => {
-                setApiData(sunSetSunRiseApi(local));
-                console.log(apiData);
+                setApiData(sunSetSunRiseApi(local[0]));
+                console.log("DEBUG location", apiData);
+            })
+            .then(local => {
+                let requestWeatherData = weatherApi(local);
+                console.log("DEBUG local", local);
+                console.log("DEBUG requestWeatherData", requestWeatherData);
+                setWeatherData(weatherApi());
+                console.log("DEBUG Weather", weatherData);
             })
     }, [])
     useEffect(() => {
@@ -301,6 +339,9 @@ const TimeTheme = ({ key, manager }) => {
         <div>
             <div>
                 <button onClick={() => { triggerProcessX() }}>TEST</button>
+            </div>
+            <div>
+
             </div>
             <p>
                 Sun Set Difference: {sunsetDiff ? sunsetDiff : "Loading"}
@@ -347,6 +388,9 @@ const TimeTheme = ({ key, manager }) => {
                 {
                     currentTime ? `Current Time: ${currentTime}` : null
                 }
+            </p>
+            <p>
+                DEBUG DIFF {debugDiff ? debugDiff : "Loading"}
             </p>
             <p>
                 CTL: {ctL ? ctL : null}

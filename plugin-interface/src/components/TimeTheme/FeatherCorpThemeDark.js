@@ -24,7 +24,6 @@ export default {
 
     // component overrides
     overrides: {
-
         // top header
         MainHeader: {
             Container: {

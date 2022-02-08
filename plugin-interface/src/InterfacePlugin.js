@@ -35,6 +35,7 @@ export default class InterfacePlugin extends FlexPlugin {
 
     flex.MainHeader.defaultProps.logoUrl =
       "https://tangerine-toad-5117.twil.io/assets/feathercorp-logo-white.svg"
+    //https://fsassets-9880.twil.io/dave-chappelle-show-wrap-it-up.gif
     //manager.updateConfig({ colorTheme: FeatherTheme });
 
     //remove interface compontents
