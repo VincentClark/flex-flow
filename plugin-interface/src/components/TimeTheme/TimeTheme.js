@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { withTheme } from '@twilio/flex-ui';
 import FeatherTheme from './FeatherCorpTheme';
 import FeatherThemeDark from './FeatherCorpThemeDark';
+import WeatherDisplay from './WeatherDisplay';
 const axios = require('axios');
 
 // well you earned it, and while napping think of cool ways to integrate crypto into flex. 
@@ -44,9 +45,6 @@ const TimeTheme = ({ key, manager }) => {
     const [debugDiff, setDebugDiff] = useState(0);
     //weather information
     const [weatherData, setWeatherData] = useState(null);
-    const [weatherCondition, setWeatherCondition] = useState(null);
-    const [weatherTemp, setWeatherTemp] = useState(null);
-    const [weatherTempHigh, setWeatherTempHigh] = useState(null);
 
     //get lattitude and longitude
     const getLocation = async () => {
@@ -62,17 +60,22 @@ const TimeTheme = ({ key, manager }) => {
         console.log("DEBUG WEATHERAPI RESPONSE", response)
         //may be duplicate sets here. 
         setWeatherData(response.data);
-        return response.data;
+        //return response.data;
     }
 
     const sunSetSunRiseApi = async (local) => {
-        const response = await axios.get(`https://api.sunrise-sunset.org/json?${local.latitude},${local.longitude}&date=today`)
+        const response = await axios.get(`https://api.sunrise-sunset.org/json?lat=${local.latitude}&lng=${local.longitude}&date=today`)
             .then(response => {
                 console.log("DEBUGHIT", response.data);
                 setSunApiData(response.data);
                 const processedSunRise = processSunRise(response.data.results.sunrise)
                 setDayLength(response.data.results.day_length);
                 //https://api.sunrise-sunset.org/json?lat=34.1624&lng=-118.1275&date=today
+                //Michgan Latitude: 45.00109 | Longitude: -86.270685
+                /*
+
+                */
+                //https://api.sunrise-sunset.org/json?lat=45.00109&lng=-45.00109&date=today
                 // triggerProcess();
                 const dayLength = processDayLength(response.data.results.day_length);
                 const sunset = processedSunRise + dayLength;
@@ -92,7 +95,6 @@ const TimeTheme = ({ key, manager }) => {
                 return [response.data, local];
             }
             )
-        //  onlt really need *date
     }
     function processSunRise(timeSunRise) {
         let time = new Date();
@@ -152,6 +154,8 @@ const TimeTheme = ({ key, manager }) => {
                 // // setCSH(csH * debugDiff);
                 // setCSS(16 * debugDiff);
                 // setCSL(93 * debugDiff);
+
+                //need to not call this so much. Going to get worse with the API calls.
                 manager.updateConfig({
                     colorTheme: {
                         light: lightTheme,
@@ -206,6 +210,7 @@ const TimeTheme = ({ key, manager }) => {
                 manager.updateConfig({ colorTheme: FeatherTheme });
 
             } else {
+                // weatherApi(location);
                 console.log("DEBUG NOTDAYTIME", currentTime, sunSetTime)
                 console.log("DEBUG NOTDAYTIME", isDayTime)
                 manager.updateConfig({ colorTheme: FeatherThemeDark });
@@ -216,6 +221,7 @@ const TimeTheme = ({ key, manager }) => {
     function triggerProcessX() {
         if (isLoaded) {
             //
+            setIsDayTime(false);
             console.log("DEBUG UseState", currentTime, sunSetTime);
             //console.log("DEBUG tempDate", tempDate);
             const adj = timeAdjustHour * 60 + timeAdjustMinute;
@@ -232,9 +238,6 @@ const TimeTheme = ({ key, manager }) => {
                 console.log("DEBUG DIF", sunSetTime.getTime() - currentTime.getTime())
                 console.log("DEBUG msToTime", msToTime(sunSetTime.getTime() - currentTime.getTime()))
                 //273052 6 minutes
-
-
-
                 manager.updateConfig({
                     colorTheme: {
                         light: lightTheme,
@@ -305,6 +308,9 @@ const TimeTheme = ({ key, manager }) => {
         else if (hours < 24) return hours + " Hrs";
         else return days + " Days"
     }
+
+    //geneating icon
+
     //moment js
     useEffect(() => {
         setIsLoaded(true);
@@ -313,17 +319,19 @@ const TimeTheme = ({ key, manager }) => {
     useEffect(() => {
         getLocation()
             .then(local => {
-                setApiData(sunSetSunRiseApi(local[0]));
+                setApiData(sunSetSunRiseApi(local));
                 console.log("DEBUG location", apiData);
+                console.log("DEBUG", local);
+                return local
             })
             .then(local => {
                 let requestWeatherData = weatherApi(local);
                 console.log("DEBUG local", local);
                 console.log("DEBUG requestWeatherData", requestWeatherData);
-                setWeatherData(weatherApi());
+                // setWeatherData(weatherApi(local));
                 console.log("DEBUG Weather", weatherData);
             })
-    }, [])
+    }, [isDayTime])
     useEffect(() => {
     }, [ctS, ctH, ctL, csS, csH, csL])
     // have date increment by 1 every second
@@ -337,11 +345,9 @@ const TimeTheme = ({ key, manager }) => {
 
     return (
         <div>
-            <div>
-                <button onClick={() => { triggerProcessX() }}>TEST</button>
-            </div>
-            <div>
 
+            <div>
+                {weatherData ? <WeatherDisplay weather={weatherData} /> : "loading"}
             </div>
             <p>
                 Sun Set Difference: {sunsetDiff ? sunsetDiff : "Loading"}
@@ -395,6 +401,9 @@ const TimeTheme = ({ key, manager }) => {
             <p>
                 CTL: {ctL ? ctL : null}
             </p>
+            <div>
+                <button onClick={() => { triggerProcessX() }}>TEST</button>
+            </div>
         </div>
     )
 }
