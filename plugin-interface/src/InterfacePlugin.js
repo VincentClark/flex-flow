@@ -34,7 +34,7 @@ export default class InterfacePlugin extends FlexPlugin {
     //flex.AgentDesktopView.Panel1.Content.add(<CustomTaskListContainer key="FlextwoSmsoutboundPlugin-component" />, options);
 
     flex.MainHeader.defaultProps.logoUrl =
-      "https://tangerine-toad-5117.twil.io/assets/feathercorp-logo-white.svg"
+      "https://fsassets-9880.twil.io/fslogo-fstheme1.png"
     //https://fsassets-9880.twil.io/dave-chappelle-show-wrap-it-up.gif
     //manager.updateConfig({ colorTheme: FeatherTheme });
 
@@ -45,9 +45,10 @@ export default class InterfacePlugin extends FlexPlugin {
     flex.NoTasksCanvas.Content.add(<QuoteComponent key="qotd" />, {
       sortOrder: -1
     });
-    flex.NoTasksCanvas.Content.add(<TimeTheme key="timeTheme" manager={manager} />, {
+    flex.NoTasksCanvas.Content.add(<TimeTheme key="timeTheme" manager={manager} flex={flex} />, {
       sortOrder: -1
     });
+    flex.SidePanel.remove();
 
 
   }

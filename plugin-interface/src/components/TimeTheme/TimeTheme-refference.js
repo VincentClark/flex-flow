@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { withTheme } from '@twilio/flex-ui';
-import styled from 'react-emotion';
-import FakeStoreThemeLight from './FakeStoreThemeLight';
 import FeatherTheme from './FeatherCorpTheme';
 import FeatherThemeDark from './FeatherCorpThemeDark';
 import WeatherDisplay from './WeatherDisplay';
@@ -9,7 +7,7 @@ const axios = require('axios');
 
 // well you earned it, and while napping think of cool ways to integrate crypto into flex. 
 // best to get a bottle of roses first. 
-const TimeTheme = ({ key, manager, flex }) => {
+const TimeTheme = ({ key, manager }) => {
     // const cTangerine = 'HSL(26, 91%, 55%)';
     // const cTangerineLight = 'HSL(26, 91%, 93%)'; // lighter version of cTangerine
     // const cSolitude = 'HSL(280, 16%, 93%)';
@@ -17,43 +15,6 @@ const TimeTheme = ({ key, manager, flex }) => {
     // const cTangerineLight = 'HSL(26, 91%, 23%)'; // lighter version of cTangerine
     // const cSolitude = 'HSL(280, 16%, 93%)';
     //const adjust = 0;
-    /*
-    SPECFIC SPOOF CODE
-    York UK 53.958332, -1.080278
-    Ankorage AK  61.2173,-149.863129
-    Melbourne AU -37.813611, 144.963056
-    Manila PH 14.583333, 120.966667
-    Athens GR 37.983333, 23.733333
-    Tashkent UZ 41.316667, 69.25
-    San Jose Costa Rica 9.933333, -84.083333
-    Rio de Janeiro BR -22.906847, -43.172896
-
-
-    */
-
-    const [spoofLocation, setSpoofLocation] = useState(false);
-    //Melborne AU -37.813611, 144.963056
-    //const [spoofCordinates, setSpoofCordinates] = useState([-37.813611, 144.963056]);
-    //York UK 53.958332, -1.080278
-    //const [spoofCordinates, setSpoofCordinates] = useState([53.958332, -1.080278]);
-    //Ankorage AK  61.2173,-149.863129
-    //const [spoofCordinates, setSpoofCordinates] = useState([61.2173, -149.863129]);
-    //Manila PH 14.583333, 120.984222
-    //const [spoofCordinates, setSpoofCordinates] = useState([14.5982715, 120.989144]);
-    //Athens GR 37.983333, 23.733333
-    //const [spoofCordinates, setSpoofCordinates] = useState([37.983333, 23.733333]);
-    //Tashkent UZ 41.316667, 69.25
-    //const [spoofCordinates, setSpoofCordinates] = useState([41.316667, 69.25]);
-    //San Jose Costa Rica 9.933333, -84.083333
-    //const [spoofCordinates, setSpoofCordinates] = useState([9.933333, -84.083333]);
-    //Rio de Janeiro BR -22.906847, -43.172896
-    //const [spoofCordinates, setSpoofCordinates] = useState([-22.906847, -43.172896]);
-
-
-
-    //END spoof code
-    const [favicon, setFavicon] = useState('https://fsassets-9880.twil.io/FSIcon_TH1.png');
-    const [siteTitle] = useState('FakeStore');
     const [location, setLocation] = useState(null);
     const [currentTime, setCurrentTime] = useState(new Date());
     const [debug, setDebug] = useState([]);
@@ -87,27 +48,16 @@ const TimeTheme = ({ key, manager, flex }) => {
 
     //get lattitude and longitude
     const getLocation = async () => {
-        if (spoofLocation) {
-            setLocation({
-                latitude: spoofCordinates[0],
-                longitude: spoofCordinates[1]
-            });
-            return ({
-                latitude: spoofCordinates[0],
-                longitude: spoofCordinates[1]
-            })
-        } else {
-            const response = await axios.get('https://ipapi.co/json/');
-            console.log(response)
-            setLocation(response.data);
-            return response.data;
-        }
-
+        const response = await axios.get('https://ipapi.co/json/');
+        console.log(response)
+        setLocation(response.data);
+        return response.data;
     }
     const weatherApi = async (local) => {
         //put api key into env variable and use it here
-        const response = await axios.get(`https://api.weatherapi.com/v1/current.json?key=83b93cfd8523492ca26194608220802&q=${local.latitude},${local.longitude}&appid=b1b15e88fa797225412429c1c50c122a1`);
-        //const response = await axios.get(`https://api.weatherapi.com/v1/current.json?key=83b93cfd8523492ca26194608220802&q=48107&lang=en&units=m`);
+        // const response = await axios.get(`https://api.weatherapi.com/v1/current.json?key=83b93cfd8523492ca26194608220802&q=${local.latitude},${local.longitude}&appid=b1b15e88fa797225412429c1c50c122a1`);
+        const response = await axios.get(`https://api.weatherapi.com/v1/current.json?key=83b93cfd8523492ca26194608220802&q=96815&appid=b1b15e88fa797225412429c1c50c122a1`);
+        //Hawaii Test 96815
         //https://api.weatherapi.com/v1/current.json?key=83b93cfd8523492ca26194608220802&q=34.1624,-118.1275&appid=b1b15e88fa797225412429c1c50c122a1
         console.log("DEBUG WEATHERAPI RESPONSE", response)
         //may be duplicate sets here. 
@@ -138,7 +88,7 @@ const TimeTheme = ({ key, manager, flex }) => {
                 console.log("debug", sunSetTime)
                 if (currentTime.getTime() < sunSetTime.getTime()) {
                     setIsDayTime(true);
-                    manager.updateConfig({ colorTheme: FakeStoreThemeLight });
+                    manager.updateConfig({ colorTheme: FeatherTheme });
                 } else {
                     setIsDayTime(false);
                     manager.updateConfig({ colorTheme: FeatherThemeDark });
@@ -185,12 +135,81 @@ const TimeTheme = ({ key, manager, flex }) => {
             //     console.log("DEBUG sunsetDiff", msDiff(sunsetDiff));
             // }
             console.log("DEBUG DIF", sunSetTime.getTime() - currentTime.getTime())
+            let arby = (sunSetTime.getTime() - currentTime) / 10000000
+            if (sunSetTime.getTime() - currentTime.getTime() <= 1000000) {
+                console.log("DEBUG ARBY", arby);
+                setDebugDiff(sunsetDiff / 1000000);
 
+                //place mins here
+                //need to wrap these in a second set of variables.
+                let ctlPercent = 55 * debugDiff;
+                let ctsPercent = 91 * debugDiff;
+                let cssPercent = 16 * debugDiff;
+                let clsPercent = 93 * debugDiff;
+                (ctlPercent > 5) ? setCTL(ctlPercent) : setCTL(5);
+                // if (ctsPercent > 45) setCTS(ctsPercent)
+                //if (cssPercent > 16) setCSS(cssPercent)
+                if (clsPercent > 80) setCSL(clsPercent)
 
-            if (currentTime.getTime() < sunSetTime.getTime() && currentTime.getTime() > sunrise.getTime()) {
+                // setCTL(55 * debugDiff);
+                // setCTS(91 * debugDiff);
+                // // setCSH(csH * debugDiff);
+                // setCSS(16 * debugDiff);
+                // setCSL(93 * debugDiff);
+
+                //need to not call this so much. Going to get worse with the API calls.
+                manager.updateConfig({
+                    colorTheme: {
+                        light: lightTheme,
+                        baseName: 'GreyLight',
+                        // base theme colors
+                        colors: {
+                            tabSelectedColor: `HSL(${ctH}, ${ctS}%, ${ctL}%)`,
+                            focusColor: `HSL(${ctH}, ${ctS}%, ${ctL}%)`,
+                            completeTaskColor: `HSL(${ctH}, ${ctS}%, ${ctL}%)`,
+                            defaultButtonColor: `HSL(${ctH}, ${ctS}%, ${ctL}%)`,
+                            flexBlueColor: `HSL(${ctH}, ${ctS}%, ${ctL}%)`,
+                        },
+                        // component overrides
+                        overrides: {
+                            // top header
+                            MainHeader: {
+                                Container: {
+                                    background: `HSL(${ctH}, ${ctS}%, ${ctL}%)`,
+                                    color: `HSL(${csH}, ${csS}%, ${csL}%)`,
+                                }
+                            },
+                            // left sidebar
+                            SideNav: {
+                                Container: {
+                                    background: `HSL(${csH}, ${csS}%, ${csL}%)`,
+                                    color: `HSL(${ctH}, ${ctS}%, ${ctL}%)`,
+                                },
+                                Button: {
+                                    background: `HSL(${csH}, ${csS}%, ${csL}%)`,
+                                    color: `HSL(${ctH}, ${ctS}%, ${ctL}%)`,
+                                    lightHover: !lightTheme
+                                },
+                                Icon: {
+                                    color: `HSL(${ctH}, ${ctS}%, ${ctL}%)`,
+                                }
+                            },
+                            // admin plugin
+                            FlexAdmin: {
+                                DashboardCard: {
+                                    Icon: {
+                                        backgroundColor: cTangerineLight
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                });
+            } else if (currentTime.getTime() < sunSetTime.getTime()) {
                 setIsDayTime(true);
                 console.log("DEBUG DAYTIME", isDayTime)
-                manager.updateConfig({ colorTheme: FakeStoreThemeLight });
+                manager.updateConfig({ colorTheme: FeatherTheme });
 
             } else {
                 // weatherApi(location);
@@ -293,19 +312,6 @@ const TimeTheme = ({ key, manager, flex }) => {
     }
 
     //geneating icon
-    //favicon test
-    function generateFavicon(icon) {
-        //const favicon = document.querySelector('link[rel="icon"]');
-        let link = document.querySelector("link[rel~='icon']");
-        if (!link) {
-            link = document.createElement('link');
-            link.rel = 'icon';
-            document.getElementsByTagName('head')[0].appendChild(link);
-        }
-        link.href = favicon;
-        document.title = siteTitle;
-    }
-
 
     //moment js
     useEffect(() => {
@@ -340,10 +346,8 @@ const TimeTheme = ({ key, manager, flex }) => {
     }, [currentTime]);
 
     return (
-
         <div>
 
-            {generateFavicon()}
             <div>
                 {weatherData ? <WeatherDisplay weather={weatherData} /> : "loading"}
             </div>
