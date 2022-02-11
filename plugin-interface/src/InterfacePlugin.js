@@ -21,8 +21,13 @@ export default class InterfacePlugin extends FlexPlugin {
    * @param flex { typeof import('@twilio/flex-ui') }
    * @param manager { import('@twilio/flex-ui').Manager }
    */
-  //flex.AgentDesktopView.Panel1.Content.add(<CustomTaskListContainer key="FlextwoSmsoutboundPlugin-component" />, options);
+
   async init(flex, manager) {
+    const configuration = {
+      icon: 'https://fsassets-9880.twil.io/FSIcon_TH',
+      logo: 'https://fsassets-9880.twil.io/fslogo-fstheme',
+      title: 'Fake Store Flex'
+    }
     // flex.Actions.addListener("beforeAcceptTask", (payload, abortFunction) => {
     //   alert("Triggered before event AcceptTask");
     //   if (!window.confirm("Are you sure you want to accept the task?")) {
@@ -64,14 +69,14 @@ export default class InterfacePlugin extends FlexPlugin {
     flex.NoTasksCanvas.Content.remove('second-line');
     flex.NoTasksCanvas.Content.remove('hint');
 
+    flex.NoTasksCanvas.Content.add(<TimeTheme key="timeTheme" manager={manager} flex={flex} config={configuration} />, {
+      sortOrder: -1
+    });
+
+
     flex.NoTasksCanvas.Content.add(<QuoteComponent key="qotd" />, {
       sortOrder: -1
     });
-    flex.NoTasksCanvas.Content.add(<TimeTheme key="timeTheme" manager={manager} flex={flex} />, {
-      sortOrder: -1
-    });
-
-
 
 
   }
