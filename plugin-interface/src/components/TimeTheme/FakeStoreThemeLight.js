@@ -1,33 +1,34 @@
 /* file: src/components/TimeTheme/FeatherCorpTheme.js */
-import { withTheme } from '@twilio/flex-ui';
 // brand colors
-
-const cTangerine = 'HSL(26, 91%, 5%)';
-const cTangerineLight = 'HSL(26, 91%, 23%)'; // lighter version of cTangerine
-const cSolitude = 'HSL(280, 16%, 93%)';
+const fsPurple = 'HSL(272, 68%, 66%)';
+const fsPurpleLight = 'HSL(272, 38%, 96%)'; // lighter version of fsPurple
+const cSolitude = 'HSL(272, 38%, 96%)';
 //was 230 ^^
-const lightTheme = false;
-
+// const fsPurple = '#ED7315';
+// const fsPurpleLight = '#A14E0E'; // lighter version of fsPurple
+// const cSolitude = '#EEEEAF0';
+const lightTheme = true;
 
 export default {
     light: lightTheme,
-    baseName: 'GreyDark',
+    baseName: 'FlexLight',
 
     // base theme colors
     colors: {
-        tabSelectedColor: cTangerine,
-        focusColor: cTangerine,
-        completeTaskColor: cTangerine,
-        defaultButtonColor: cTangerine,
-        flexBlueColor: cTangerine
+        tabSelectedColor: fsPurple,
+        focusColor: fsPurple,
+        completeTaskColor: fsPurple,
+        defaultButtonColor: fsPurple,
+        flexBlueColor: fsPurple
     },
 
     // component overrides
     overrides: {
+
         // top header
         MainHeader: {
             Container: {
-                background: cTangerine,
+                background: fsPurple,
                 color: cSolitude
             }
         },
@@ -36,15 +37,15 @@ export default {
         SideNav: {
             Container: {
                 background: cSolitude,
-                color: cTangerine
+                color: fsPurple
             },
             Button: {
                 background: cSolitude,
-                color: cTangerine,
+                color: fsPurple,
                 lightHover: !lightTheme
             },
             Icon: {
-                color: cTangerine
+                color: fsPurple
             }
         },
 
@@ -52,7 +53,7 @@ export default {
         FlexAdmin: {
             DashboardCard: {
                 Icon: {
-                    backgroundColor: cTangerineLight
+                    backgroundColor: fsPurpleLight
                 }
             }
         }

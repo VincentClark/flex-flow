@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { withTheme } from '@twilio/flex-ui';
 import styled from 'react-emotion';
 import FakeStoreThemeLight from './FakeStoreThemeLight';
-
-import FakeStoreThemeDark from './FakeStoreThemeDark';
+import FeatherTheme from './FeatherCorpTheme';
+import FeatherThemeDark from './FeatherCorpThemeDark';
 import WeatherDisplay from './WeatherDisplay';
 const axios = require('axios');
 
 // well you earned it, and while napping think of cool ways to integrate crypto into flex. 
 // best to get a bottle of roses first. 
-const TimeTheme = ({ key, manager, flex, config }) => {
+const TimeTheme = ({ key, manager, flex }) => {
     /*
    
 
@@ -19,11 +19,8 @@ const TimeTheme = ({ key, manager, flex, config }) => {
     const [sunShiftMinute, setSunShiftMinute] = useState(0);
     const [spoofLocation, setSpoofLocation] = useState(false);
     const [debugPannel, setDebugPannel] = useState('none');
-    //Ann Arbor Mi - 42.2808, -83.7430
-    //const [spoofCordinates, setSpoofCordinates] = useState([-42.2808, -83.7430]);
-
     //Melborne AU -37.813611, 144.963056
-    // const [spoofCordinates, setSpoofCordinates] = useState([-37.813611, 144.963056]);
+    //const [spoofCordinates, setSpoofCordinates] = useState([-37.813611, 144.963056]);
     //York UK 53.958332, -1.080278
     //const [spoofCordinates, setSpoofCordinates] = useState([53.958332, -1.080278]);
     //Ankorage AK  61.2173,-149.863129
@@ -42,15 +39,8 @@ const TimeTheme = ({ key, manager, flex, config }) => {
 
 
     //END spoof code
-
-    //New Sunrise / Sunset states
-    const [nSunrise, setNSunrise] = useState(null);
-    const [nSunset, setNSunset] = useState(null);
-    const [astroData, setAstroData] = useState(null);
-    //end new sunrise / sunset states
-
-    const [favicon, setFavicon] = useState(`${config.icon}1.png`);
-    const [siteTitle] = useState('FakeStore Flex');
+    const [favicon, setFavicon] = useState('https://fsassets-9880.twil.io/FSIcon_TH1.png');
+    const [siteTitle] = useState('FakeStore');
     const [location, setLocation] = useState(null);
     const [currentTime, setCurrentTime] = useState(new Date());
     const [debug, setDebug] = useState([]);
@@ -66,7 +56,7 @@ const TimeTheme = ({ key, manager, flex, config }) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [timeUntilSunset, setTimeUntilSunset] = useState(null);
 
-
+    const [cTangerine, setCTangerin] = useState('HSL(26, 91, 5)');
     const [ctH, setCTH] = useState(26);
     const [ctS, setCTS] = useState(91);
     const [ctL, setCTL] = useState(55);
@@ -139,15 +129,9 @@ const TimeTheme = ({ key, manager, flex, config }) => {
                 if (currentTime.getTime() < sunSetTime.getTime()) {
                     setIsDayTime(true);
                     manager.updateConfig({ colorTheme: FakeStoreThemeLight });
-                    flex.MainHeader.defaultProps.logoUrl =
-                        `${config.logo}1.png`;
-                    setFavicon(`${config.icon}1.png`);
                 } else {
                     setIsDayTime(false);
-                    manager.updateConfig({ colorTheme: FakeStoreThemeDark });
-                    flex.MainHeader.defaultProps.logoUrl =
-                        `${config.logo}2.png`;
-                    setFavicon(`${config.logo}2.png`);
+                    manager.updateConfig({ colorTheme: FeatherThemeDark });
                 }
                 //triggerProcess();
                 return [response.data, local];
@@ -197,24 +181,96 @@ const TimeTheme = ({ key, manager, flex, config }) => {
                 setIsDayTime(true);
                 console.log("DEBUG DAYTIME", isDayTime)
                 manager.updateConfig({ colorTheme: FakeStoreThemeLight });
-                flex.MainHeader.defaultProps.logoUrl =
-                    `${config.logo}1.png`;
-                setFavicon(`${config.icon}1.png`);
 
             } else {
                 // weatherApi(location);
                 console.log("DEBUG NOTDAYTIME", currentTime, sunSetTime)
                 console.log("DEBUG NOTDAYTIME", isDayTime)
-                manager.updateConfig({ colorTheme: FakeStoreThemeDark });
-                flex.MainHeader.defaultProps.logoUrl =
-                    `${config.logo}2.png`;
-                //https://fsassets-9880.twil.io/fslogo-fstheme2.png
+                manager.updateConfig({ colorTheme: FeatherThemeDark });
                 setIsDayTime(false);
-                setFavicon(`${config.icon}2.png`)
             }
         }
     }
+    function triggerProcessX() {
+        if (isLoaded) {
+            //
+            setIsDayTime(false);
+            console.log("DEBUG UseState", currentTime, sunSetTime);
+            //console.log("DEBUG tempDate", tempDate);
+            const adj = timeAdjustHour * 60 + timeAdjustMinute;
+            if (sunSetTime.getTime() - currentTime.getTime() < 273052 && ctL >= 30) {
+                setCTL(ctL - 5);
+                setCSH(csH - 10);
+                setCSS(csS - 10);
+                setCSL(csL - 10);
 
+            }
+            if (currentTime.getTime() < sunSetTime.getTime()) {
+                setIsDayTime(true);
+                console.log("DEBUG DAYTIME", isDayTime)
+                console.log("DEBUG DIF", sunSetTime.getTime() - currentTime.getTime())
+                console.log("DEBUG msToTime", msToTime(sunSetTime.getTime() - currentTime.getTime()))
+                //273052 6 minutes
+                manager.updateConfig({
+                    colorTheme: {
+                        light: lightTheme,
+                        baseName: 'GreyLight',
+                        // base theme colors
+                        colors: {
+                            tabSelectedColor: `HSL(${ctH}, ${ctS}%, ${ctL}%)`,
+                            focusColor: `HSL(${ctH}, ${ctS}%, ${ctL}%)`,
+                            completeTaskColor: `HSL(${ctH}, ${ctS}%, ${ctL}%)`,
+                            defaultButtonColor: `HSL(${ctH}, ${ctS}%, ${ctL}%)`,
+                            flexBlueColor: `HSL(${ctH}, ${ctS}%, ${ctL}%)`,
+                        },
+
+                        // component overrides
+                        overrides: {
+
+                            // top header
+                            MainHeader: {
+                                Container: {
+                                    background: `HSL(${csH}, ${ctS}%, ${ctL}%)`,
+                                    color: `HSL(${csH}, ${csS}%, ${csL}%)`,
+                                }
+                            },
+
+                            // left sidebar
+                            SideNav: {
+                                Container: {
+                                    background: `HSL(${csH}, ${csS}%, ${csL}%)`,
+                                    color: `HSL(${ctH}, ${ctS}%, ${ctL}%)`,
+                                },
+                                Button: {
+                                    background: `HSL(${csH}, ${csS}%, ${csL}%)`,
+                                    color: `HSL(${ctH}, ${ctS}%, ${ctL}%)`,
+                                    lightHover: !lightTheme
+                                },
+                                Icon: {
+                                    color: `HSL(${ctH}, ${ctS}%, ${ctL}%)`,
+                                }
+                            },
+
+                            // admin plugin
+                            FlexAdmin: {
+                                DashboardCard: {
+                                    Icon: {
+                                        backgroundColor: cTangerineLight
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                });
+            } else {
+                console.log("DEBUG NOTDAYTIME", currentTime, sunSetTime)
+                manager.updateConfig({ colorTheme: FeatherThemeDark });
+                setIsDayTime(false);
+            }
+
+        }
+    }
     function msToTime(ms) {
         let seconds = (ms / 1000).toFixed(1);
         let minutes = (ms / (1000 * 60)).toFixed(1);
@@ -278,12 +334,12 @@ const TimeTheme = ({ key, manager, flex, config }) => {
             <Container>
                 {generateFavicon()}
                 <InfoBlock>
-                    {weatherData ? <WeatherDisplay weather={weatherData} /> : "loading"}
-                </InfoBlock>
-                <InfoBlock>
                     <FlexButton onClick={(event) => handelDebug(event)}>Debug Pannel</FlexButton>
                 </InfoBlock>
 
+                <InfoBlock>
+                    {weatherData ? <WeatherDisplay weather={weatherData} /> : "loading"}
+                </InfoBlock>
                 <Debug style={{ display: debugPannel }}>
                     <InfoBlock>
                         Sun Set Difference: {sunsetDiff ? sunsetDiff : "Loading"}
@@ -361,7 +417,7 @@ const InfoBlock = styled("div")`
     `
 const FlexButton = styled("button")`
 background-color: ${props => props.theme.calculated.backgroundColor};
-
+color: ${props => props.theme.calculated.textColor};
 `
 
 

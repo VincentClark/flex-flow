@@ -1,33 +1,34 @@
 /* file: src/components/TimeTheme/FeatherCorpTheme.js */
-import { withTheme } from '@twilio/flex-ui';
 // brand colors
-
-const cTangerine = 'HSL(26, 91%, 5%)';
-const cTangerineLight = 'HSL(26, 91%, 23%)'; // lighter version of cTangerine
-const cSolitude = 'HSL(280, 16%, 93%)';
+const fsMain = '#6BBF80';
+const fsMainLight = '#4A8C5B'; // lighter version of fsPurple
+const cSolitude = '#142617';
 //was 230 ^^
+// const fsPurple = '#ED7315';
+// const fsPurpleLight = '#A14E0E'; // lighter version of fsPurple
+// const cSolitude = '#EEEEAF0';
 const lightTheme = false;
-
 
 export default {
     light: lightTheme,
-    baseName: 'GreyDark',
+    baseName: 'FlexDark',
 
     // base theme colors
     colors: {
-        tabSelectedColor: cTangerine,
-        focusColor: cTangerine,
-        completeTaskColor: cTangerine,
-        defaultButtonColor: cTangerine,
-        flexBlueColor: cTangerine
+        tabSelectedColor: fsMain,
+        focusColor: fsMain,
+        completeTaskColor: fsMain,
+        defaultButtonColor: fsMain,
+        flexBlueColor: fsMain
     },
 
     // component overrides
     overrides: {
+
         // top header
         MainHeader: {
             Container: {
-                background: cTangerine,
+                background: fsMain,
                 color: cSolitude
             }
         },
@@ -36,15 +37,15 @@ export default {
         SideNav: {
             Container: {
                 background: cSolitude,
-                color: cTangerine
+                color: fsMain
             },
             Button: {
                 background: cSolitude,
-                color: cTangerine,
+                color: fsMain,
                 lightHover: !lightTheme
             },
             Icon: {
-                color: cTangerine
+                color: fsMain
             }
         },
 
@@ -52,7 +53,7 @@ export default {
         FlexAdmin: {
             DashboardCard: {
                 Icon: {
-                    backgroundColor: cTangerineLight
+                    backgroundColor: fsMainLight
                 }
             }
         }
