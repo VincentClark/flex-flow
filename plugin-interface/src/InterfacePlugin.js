@@ -54,8 +54,8 @@ export default class InterfacePlugin extends FlexPlugin {
 
 
 
-    flex.MainHeader.defaultProps.logoUrl =
-      "https://fsassets-9880.twil.io/fslogo-fstheme1.png"
+    // flex.MainHeader.defaultProps.logoUrl =
+    //   "https://fsassets-9880.twil.io/fslogo-fstheme1.png"
     //https://fsassets-9880.twil.io/dave-chappelle-show-wrap-it-up.gif
     //manager.updateConfig({ colorTheme: FeatherTheme });
 

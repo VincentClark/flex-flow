@@ -3,7 +3,7 @@ import { withTheme } from '@twilio/flex-ui';
 import styled from 'react-emotion';
 import FakeStoreThemeLight from './FakeStoreThemeLight';
 import FeatherTheme from './FeatherCorpTheme';
-import FakeStoreThemeDark from './FakeStoreThemeDark';
+import FeatherThemeDark from './FeatherCorpThemeDark';
 import WeatherDisplay from './WeatherDisplay';
 const axios = require('axios');
 
@@ -19,11 +19,8 @@ const TimeTheme = ({ key, manager, flex }) => {
     const [sunShiftMinute, setSunShiftMinute] = useState(0);
     const [spoofLocation, setSpoofLocation] = useState(false);
     const [debugPannel, setDebugPannel] = useState('none');
-    //Ann Arbor Mi - 42.2808, -83.7430
-    //const [spoofCordinates, setSpoofCordinates] = useState([-42.2808, -83.7430]);
-
     //Melborne AU -37.813611, 144.963056
-    // const [spoofCordinates, setSpoofCordinates] = useState([-37.813611, 144.963056]);
+    //const [spoofCordinates, setSpoofCordinates] = useState([-37.813611, 144.963056]);
     //York UK 53.958332, -1.080278
     //const [spoofCordinates, setSpoofCordinates] = useState([53.958332, -1.080278]);
     //Ankorage AK  61.2173,-149.863129
@@ -42,13 +39,6 @@ const TimeTheme = ({ key, manager, flex }) => {
 
 
     //END spoof code
-
-    //New Sunrise / Sunset states
-    const [nSunrise, setNSunrise] = useState(null);
-    const [nSunset, setNSunset] = useState(null);
-    const [astroData, setAstroData] = useState(null);
-    //end new sunrise / sunset states
-
     const [favicon, setFavicon] = useState('https://fsassets-9880.twil.io/FSIcon_TH1.png');
     const [siteTitle] = useState('FakeStore');
     const [location, setLocation] = useState(null);
@@ -139,15 +129,9 @@ const TimeTheme = ({ key, manager, flex }) => {
                 if (currentTime.getTime() < sunSetTime.getTime()) {
                     setIsDayTime(true);
                     manager.updateConfig({ colorTheme: FakeStoreThemeLight });
-                    flex.MainHeader.defaultProps.logoUrl =
-                        "https://fsassets-9880.twil.io/fslogo-fstheme1.png";
-                    setFavicon('https://fsassets-9880.twil.io/FSIcon_TH1.png');
                 } else {
                     setIsDayTime(false);
-                    manager.updateConfig({ colorTheme: FakeStoreThemeDark });
-                    flex.MainHeader.defaultProps.logoUrl =
-                        "https://fsassets-9880.twil.io/fslogo-fstheme2.png";
-                    setFavicon('https://fsassets-9880.twil.io/FSIcon_TH2.png')
+                    manager.updateConfig({ colorTheme: FeatherThemeDark });
                 }
                 //triggerProcess();
                 return [response.data, local];
@@ -197,20 +181,13 @@ const TimeTheme = ({ key, manager, flex }) => {
                 setIsDayTime(true);
                 console.log("DEBUG DAYTIME", isDayTime)
                 manager.updateConfig({ colorTheme: FakeStoreThemeLight });
-                flex.MainHeader.defaultProps.logoUrl =
-                    "https://fsassets-9880.twil.io/fslogo-fstheme1.png"
-                setFavicon('https://fsassets-9880.twil.io/FSIcon_TH1.png')
 
             } else {
                 // weatherApi(location);
                 console.log("DEBUG NOTDAYTIME", currentTime, sunSetTime)
                 console.log("DEBUG NOTDAYTIME", isDayTime)
-                manager.updateConfig({ colorTheme: FakeStoreThemeDark });
-                flex.MainHeader.defaultProps.logoUrl =
-                    "https://fsassets-9880.twil.io/fslogo-fstheme2.png"
-                //https://fsassets-9880.twil.io/fslogo-fstheme2.png
+                manager.updateConfig({ colorTheme: FeatherThemeDark });
                 setIsDayTime(false);
-                setFavicon('https://fsassets-9880.twil.io/FSIcon_TH2.png')
             }
         }
     }
@@ -288,7 +265,7 @@ const TimeTheme = ({ key, manager, flex }) => {
                 });
             } else {
                 console.log("DEBUG NOTDAYTIME", currentTime, sunSetTime)
-                manager.updateConfig({ colorTheme: FakeStoreThemeDark });
+                manager.updateConfig({ colorTheme: FeatherThemeDark });
                 setIsDayTime(false);
             }
 
@@ -440,7 +417,7 @@ const InfoBlock = styled("div")`
     `
 const FlexButton = styled("button")`
 background-color: ${props => props.theme.calculated.backgroundColor};
-
+color: ${props => props.theme.calculated.textColor};
 `
 
 

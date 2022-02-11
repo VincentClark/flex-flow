@@ -4,16 +4,16 @@ import styled from 'react-emotion';
 const WeatherDisplay = ({ weather }) => {
     const tempDegrees = () => {
         if (weather.location.country === 'United States of America' || weather.location.country === 'USA' || weather.location.country === 'US' || weather.location.country === 'United States') {
-            return `${weather.current.temp_f}`
+            return `${weather.current.temp_f}° F`
         } else {
-            return `${weather.current.temp_c}`;
+            return `${weather.current.temp_c}° C`;
         }
 
     }
 
     return (
         <Container>
-            <Header>{`${weather.location.name} ${weather.current.condition.text} : ${tempDegrees()}°`}</Header>
+            <Header>{`${weather.location.name} ${weather.current.condition.text} : ${tempDegrees()}`}</Header>
             <Setter><img width='100' height='100' src={`http:${weather.current.condition.icon}`} /></Setter>
         </Container>
     )
