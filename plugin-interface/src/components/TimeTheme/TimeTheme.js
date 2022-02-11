@@ -10,28 +10,15 @@ const axios = require('axios');
 // well you earned it, and while napping think of cool ways to integrate crypto into flex. 
 // best to get a bottle of roses first. 
 const TimeTheme = ({ key, manager, flex }) => {
-    // const cTangerine = 'HSL(26, 91%, 55%)';
-    // const cTangerineLight = 'HSL(26, 91%, 93%)'; // lighter version of cTangerine
-    // const cSolitude = 'HSL(280, 16%, 93%)';
-    //     const cTangerine = 'HSL(26, 91%, 5%)';
-    // const cTangerineLight = 'HSL(26, 91%, 23%)'; // lighter version of cTangerine
-    // const cSolitude = 'HSL(280, 16%, 93%)';
-    //const adjust = 0;
     /*
-    SPECFIC SPOOF CODE
-    York UK 53.958332, -1.080278
-    Ankorage AK  61.2173,-149.863129
-    Melbourne AU -37.813611, 144.963056
-    Manila PH 14.583333, 120.966667
-    Athens GR 37.983333, 23.733333
-    Tashkent UZ 41.316667, 69.25
-    San Jose Costa Rica 9.933333, -84.083333
-    Rio de Janeiro BR -22.906847, -43.172896
+   
 
 
     */
-
+    const [sunShiftHour, setSunShiftHour] = useState(0);
+    const [sunShiftMinute, setSunShiftMinute] = useState(0);
     const [spoofLocation, setSpoofLocation] = useState(false);
+    const [debugPannel, setDebugPannel] = useState('none');
     //Melborne AU -37.813611, 144.963056
     //const [spoofCordinates, setSpoofCordinates] = useState([-37.813611, 144.963056]);
     //York UK 53.958332, -1.080278
@@ -68,6 +55,7 @@ const TimeTheme = ({ key, manager, flex }) => {
     const [timeAdjustMinute, setTimeAdjustMinute] = useState(0);
     const [isLoaded, setIsLoaded] = useState(false);
     const [timeUntilSunset, setTimeUntilSunset] = useState(null);
+
     const [cTangerine, setCTangerin] = useState('HSL(26, 91, 5)');
     const [ctH, setCTH] = useState(26);
     const [ctS, setCTS] = useState(91);
@@ -79,12 +67,14 @@ const TimeTheme = ({ key, manager, flex }) => {
     const [cSolitude, setCSolitude] = useState('HSL(280, 16%, 93%)');
     const [sunsetDiff, setSunsetDiff] = useState(null);
     const [lightTheme, setLightTheme] = useState(true);
-    const [sunShiftHour, setSunShiftHour] = useState(0);
-    const [sunShiftMinute, setSunShiftMinute] = useState(0);
     const [debugDiff, setDebugDiff] = useState(0);
     //weather information
     const [weatherData, setWeatherData] = useState(null);
 
+    //event handlers
+    const handelDebug = (e) => {
+        (debugPannel === "block") ? setDebugPannel("none") : setDebugPannel("block");
+    }
     //get lattitude and longitude
     const getLocation = async () => {
         if (spoofLocation) {
@@ -340,70 +330,95 @@ const TimeTheme = ({ key, manager, flex }) => {
     }, [currentTime]);
 
     return (
-
         <div>
+            <Container>
+                {generateFavicon()}
+                <InfoBlock>
+                    <FlexButton onClick={(event) => handelDebug(event)}>Debug Pannel</FlexButton>
+                </InfoBlock>
 
-            {generateFavicon()}
-            <div>
-                {weatherData ? <WeatherDisplay weather={weatherData} /> : "loading"}
-            </div>
-            <p>
-                Sun Set Difference: {sunsetDiff ? sunsetDiff : "Loading"}
-            </p>
-            <p>
-                {
-                    location ? `Lattitude: ${location.latitude} || Longitude: ${location.longitude}` : null
-                }
-            </p>
-            <p>
+                <InfoBlock>
+                    {weatherData ? <WeatherDisplay weather={weatherData} /> : "loading"}
+                </InfoBlock>
+                <Debug style={{ display: debugPannel }}>
+                    <InfoBlock>
+                        Sun Set Difference: {sunsetDiff ? sunsetDiff : "Loading"}
+                    </InfoBlock>
+                    <InfoBlock>
+                        {
+                            location ? `Lattitude: ${location.latitude} || Longitude: ${location.longitude}` : null
+                        }
+                    </InfoBlock>
+                    <InfoBlock>
                 //map through apiData
-                {
-                    apiData.results ? `Sunrise: ${sunrise}` : null
-                }
+                        {
+                            apiData.results ? `Sunrise: ${sunrise}` : null
+                        }
 
-            </p>
-            <p>
-                SunSet Date : {
-                    sunSetTime ? `${sunSetTime.toLocaleTimeString()}` : null
-                }
-            </p>
-            <p>
-                {
-                    apiData.results ? `Sunset: ${sunSetTime}` : null
-                }
-            </p>
-            <p>
-                dayLength: {dayLength}
-            </p>
-            <p>
-                DEBUG {debug[0]} and {debug[1]} and sunset time
-            </p>
-            <p>
-                Is Daylight:
-                {
-                    isDayTime ? "true" : "false"
-                }
-            </p>
-            <p>
-                {sunApiData.results ? `Sunrise: ${sunApiData.results.sunrise}` : null}
+                    </InfoBlock>
+                    <InfoBlock>
+                        SunSet Date : {
+                            sunSetTime ? `${sunSetTime.toLocaleTimeString()}` : null
+                        }
+                    </InfoBlock>
+                    <InfoBlock>
+                        {
+                            apiData.results ? `Sunset: ${sunSetTime}` : null
+                        }
+                    </InfoBlock>
+                    <InfoBlock>
+                        dayLength: {dayLength}
+                    </InfoBlock>
+                    <InfoBlock>
+                        DEBUG {debug[0]} and {debug[1]} and sunset time
+                    </InfoBlock>
+                    <InfoBlock>
+                        Is Daylight:
+                        {
+                            isDayTime ? "true" : "false"
+                        }
+                    </InfoBlock>
+                    <InfoBlock>
+                        {sunApiData.results ? `Sunrise: ${sunApiData.results.sunrise}` : null}
 
-            </p>
-            <p>
-                {
-                    currentTime ? `Current Time: ${currentTime}` : null
-                }
-            </p>
-            <p>
-                DEBUG DIFF {debugDiff ? debugDiff : "Loading"}
-            </p>
-            <p>
-                CTL: {ctL ? ctL : null}
-            </p>
-            <div>
-                <button onClick={() => { triggerProcessX() }}>TEST</button>
-            </div>
+                    </InfoBlock>
+                    <InfoBlock>
+                        {
+                            currentTime ? `Current Time: ${currentTime}` : null
+                        }
+                    </InfoBlock>
+                    <InfoBlock>
+                        DEBUG DIFF {debugDiff ? debugDiff : "Loading"}
+                    </InfoBlock>
+                    <InfoBlock>
+                        CTL: {ctL ? ctL : null}
+                    </InfoBlock>
+                    <InfoBlock>
+                        <FlexButton onClick={() => { triggerProcessX() }}>TEST</FlexButton>
+                    </InfoBlock>
+                </Debug>
+            </Container>
         </div>
     )
 }
+const Container = styled("div")`
+    display: block;
+    color: ${props => props.theme.calculated.textColor};
+
+    `
+const Debug = styled("div")`
+    
+    `
+const InfoBlock = styled("div")`
+    display: block;
+    font-size: 12px; 
+    padding:2px;
+    color: ${props => props.theme.calculated.textColor};
+    `
+const FlexButton = styled("button")`
+background-color: ${props => props.theme.calculated.backgroundColor};
+color: ${props => props.theme.calculated.textColor};
+`
+
 
 export default withTheme(TimeTheme)

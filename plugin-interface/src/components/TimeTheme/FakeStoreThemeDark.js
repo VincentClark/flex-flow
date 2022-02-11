@@ -1,25 +1,25 @@
 /* file: src/components/TimeTheme/FeatherCorpTheme.js */
 // brand colors
-const fsPurple = '#6BBF80';
-const fsPurpleLight = '#4A8C5B'; // lighter version of fsPurple
+const fsMain = '#6BBF80';
+const fsMainLight = '#4A8C5B'; // lighter version of fsPurple
 const cSolitude = '#142617';
 //was 230 ^^
 // const fsPurple = '#ED7315';
 // const fsPurpleLight = '#A14E0E'; // lighter version of fsPurple
 // const cSolitude = '#EEEEAF0';
-const lightTheme = true;
+const lightTheme = false;
 
 export default {
     light: lightTheme,
-    baseName: 'FlexLight',
+    baseName: 'FlexDark',
 
     // base theme colors
     colors: {
-        tabSelectedColor: fsPurple,
-        focusColor: fsPurple,
-        completeTaskColor: fsPurple,
-        defaultButtonColor: fsPurple,
-        flexBlueColor: fsPurple
+        tabSelectedColor: fsMain,
+        focusColor: fsMain,
+        completeTaskColor: fsMain,
+        defaultButtonColor: fsMain,
+        flexBlueColor: fsMain
     },
 
     // component overrides
@@ -28,7 +28,7 @@ export default {
         // top header
         MainHeader: {
             Container: {
-                background: fsPurple,
+                background: fsMain,
                 color: cSolitude
             }
         },
@@ -37,15 +37,15 @@ export default {
         SideNav: {
             Container: {
                 background: cSolitude,
-                color: fsPurple
+                color: fsMain
             },
             Button: {
                 background: cSolitude,
-                color: fsPurple,
+                color: fsMain,
                 lightHover: !lightTheme
             },
             Icon: {
-                color: fsPurple
+                color: fsMain
             }
         },
 
@@ -53,7 +53,7 @@ export default {
         FlexAdmin: {
             DashboardCard: {
                 Icon: {
-                    backgroundColor: fsPurpleLight
+                    backgroundColor: fsMainLight
                 }
             }
         }

@@ -2,6 +2,7 @@ import React from 'react';
 import { VERSION } from '@twilio/flex-ui';
 import { FlexPlugin } from 'flex-plugin';
 import FeatherTheme from './components/TimeTheme/FeatherCorpTheme';
+import FakeStoreThemeDark from './components/TimeTheme/FakeStoreThemeDark';
 import QuoteComponent from './components/Quote/Quote';
 import reducers, { namespace } from './states';
 import TimeTheme from './components/TimeTheme/TimeTheme';
@@ -22,16 +23,36 @@ export default class InterfacePlugin extends FlexPlugin {
    */
   //flex.AgentDesktopView.Panel1.Content.add(<CustomTaskListContainer key="FlextwoSmsoutboundPlugin-component" />, options);
   async init(flex, manager) {
-    //this.registerReducers(manager);
-
-    // config
-    //https://fsassets-9880.twil.io/fakestore.png https://fsassets-9880.twil.io/fslogo.svg
-    // const configuration = {
-    //   colorTheme: {
-    //     baseName: "FlexLight",
+    // flex.Actions.addListener("beforeAcceptTask", (payload, abortFunction) => {
+    //   alert("Triggered before event AcceptTask");
+    //   if (!window.confirm("Are you sure you want to accept the task?")) {
+    //     abortFunction();
     //   }
-    // };
-    //flex.AgentDesktopView.Panel1.Content.add(<CustomTaskListContainer key="FlextwoSmsoutboundPlugin-component" />, options);
+    // });
+
+    flex.Actions.replaceAction("WrapupTask", (payload, original) => {
+      // Only alter chat tasks:
+      if (payload.task.taskChannelUniqueName !== "chat") {
+        original(payload);
+        console.log("Debuger wtf? this is no chat.", payload);
+        console.log("Debuger", payload.task.taskChannelUniqueName)
+      } else {
+        return new Promise(function (resolve, reject) {
+          // Send the message:
+          console.log("Debuger wtf? this is chat.", payload);
+          flex.Actions.invokeAction("SendMessage", {
+            body: 'Thanks for chatting. Your session is now closed.',
+            channelSid: payload.task.attributes.channelSid
+          })
+            .then(response => {
+              // Wait until the message is sent to wrap-up the task:
+              resolve(original(payload));
+            });
+        });
+      }
+    });
+
+
 
     flex.MainHeader.defaultProps.logoUrl =
       "https://fsassets-9880.twil.io/fslogo-fstheme1.png"
@@ -42,13 +63,15 @@ export default class InterfacePlugin extends FlexPlugin {
     flex.NoTasksCanvas.Content.remove('first-line');
     flex.NoTasksCanvas.Content.remove('second-line');
     flex.NoTasksCanvas.Content.remove('hint');
+
     flex.NoTasksCanvas.Content.add(<QuoteComponent key="qotd" />, {
       sortOrder: -1
     });
     flex.NoTasksCanvas.Content.add(<TimeTheme key="timeTheme" manager={manager} flex={flex} />, {
       sortOrder: -1
     });
-    flex.SidePanel.remove();
+
+
 
 
   }
