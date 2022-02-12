@@ -17,36 +17,93 @@ const TimeTheme = ({ key, manager, flex, config }) => {
     */
     const [sunShiftHour, setSunShiftHour] = useState(0);
     const [sunShiftMinute, setSunShiftMinute] = useState(0);
+    const [apiSunRise, setApiSunRise] = useState(null);
     const [spoofLocation, setSpoofLocation] = useState(false);
     const [debugPannel, setDebugPannel] = useState('none');
     //Ann Arbor Mi - 42.2808, -83.7430
-    //const [spoofCordinates, setSpoofCordinates] = useState([-42.2808, -83.7430]);
+    //const [spoofCoordinates, setSpoofCoordinates] = useState([-42.2808, -83.7430]);
 
     //Melborne AU -37.813611, 144.963056
-    // const [spoofCordinates, setSpoofCordinates] = useState([-37.813611, 144.963056]);
+    //  const [spoofCoordinates, setSpoofCoordinates] = useState([-37.813611, 144.963056]);
     //York UK 53.958332, -1.080278
-    //const [spoofCordinates, setSpoofCordinates] = useState([53.958332, -1.080278]);
+    //const [spoofCoordinates, setSpoofCoordinates] = useState([53.958332, -1.080278]);
     //Ankorage AK  61.2173,-149.863129
-    //const [spoofCordinates, setSpoofCordinates] = useState([61.2173, -149.863129]);
+    //const [spoofCoordinates, setSpoofCoordinates] = useState([61.2173, -149.863129]);
     //Manila PH 14.583333, 120.984222
-    //const [spoofCordinates, setSpoofCordinates] = useState([14.5982715, 120.989144]);
+    //const [spoofCoordinates, setSpoofCoordinates] = useState([14.5982715, 120.989144]);
     //Athens GR 37.983333, 23.733333
-    //const [spoofCordinates, setSpoofCordinates] = useState([37.983333, 23.733333]);
+    //const [spoofCoordinates, setSpoofCoordinates] = useState([37.983333, 23.733333]);
     //Tashkent UZ 41.316667, 69.25
-    //const [spoofCordinates, setSpoofCordinates] = useState([41.316667, 69.25]);
+    //const [spoofCoordinates, setSpoofCoordinates] = useState([41.316667, 69.25]);
     //San Jose Costa Rica 9.933333, -84.083333
-    //const [spoofCordinates, setSpoofCordinates] = useState([9.933333, -84.083333]);
+    //const [spoofCoordinates, setSpoofCoordinates] = useState([9.933333, -84.083333]);
     //Rio de Janeiro BR -22.906847, -43.172896
-    //const [spoofCordinates, setSpoofCordinates] = useState([-22.906847, -43.172896]);
+    //const [spoofCoordinates, setSpoofCoordinates] = useState([-22.906847, -43.172896]);
+    const [spoofCoordinates, setSpoofCoordinates] = useState([]);
+    const [spoofCity, setSpoofCity] = useState('');
+    const spoofableLocations =
+        [
+            {
+                name: '----',
+                coordinates: [0, 0]
+            },
+            {
+                name: 'Melbourne',
+                latitude: -37.813611,
+                longitude: 144.963056
+            },
+            {
+                name: 'York',
+                latitude: 53.958332,
+                longitude: -1.080278
+            },
+            {
+                name: 'Ankorage',
+                latitude: 61.2173,
+                longitude: -149.863129
+            },
+            {
+                name: 'Manila',
+                latitude: 14.583333,
+                longitude: 120.984222
+            },
+            {
+                name: 'Athens',
+                latitude: 37.983333,
+                longitude: 23.733333
+            },
+            {
+                name: 'Tashkent',
+                latitude: 41.316667,
+                longitude: 69.25
+            },
+            {
+                name: 'San Jose',
+                latitude: 9.933333,
+                longitude: -84.083333
+            },
+            {
+                name: 'Rio de Janeiro',
+                latitude: -22.906847,
+                longitude: -43.172896
+            },
+            {
+                name: 'Ann Arbor',
+                latitude: 42.2808,
+                longitude: -83.7430
+            },
+            {
+                name: 'London',
+                latitude: 51.509865,
+                longitude: -0.118092
+            }
+        ]
 
 
 
     //END spoof code
 
-    //New Sunrise / Sunset states
-    const [nSunrise, setNSunrise] = useState(null);
-    const [nSunset, setNSunset] = useState(null);
-    const [astroData, setAstroData] = useState(null);
+
     //end new sunrise / sunset states
 
     const [favicon, setFavicon] = useState(`${config.icon}1.png`);
@@ -61,8 +118,8 @@ const TimeTheme = ({ key, manager, flex, config }) => {
     const [dayLength, setDayLength] = useState(null);
     const [sunSetTime, setSunSetTime] = useState(new Date());
     const [isDayTime, setIsDayTime] = useState(false);
-    const [timeAdjustHour, setTimeAdjustHour] = useState(0);
-    const [timeAdjustMinute, setTimeAdjustMinute] = useState(0);
+    const [timeAdjustHour, setTimeAdjustHour] = useState();
+    const [timeAdjustMinute, setTimeAdjustMinute] = useState();
     const [isLoaded, setIsLoaded] = useState(false);
     const [timeUntilSunset, setTimeUntilSunset] = useState(null);
 
@@ -82,19 +139,86 @@ const TimeTheme = ({ key, manager, flex, config }) => {
     const [weatherData, setWeatherData] = useState(null);
 
     //event handlers
-    const handelDebug = (e) => {
+    const handleDebug = (e) => {
         (debugPannel === "block") ? setDebugPannel("none") : setDebugPannel("block");
+    }
+
+    const handleSpoofLocations = (e) => {
+        setSpoofLocation(!spoofLocation);
+    }
+    const handleSpoofCoordinates = (e) => {
+        //get value of selected spoof location
+        const spoofLocation = spoofableLocations.find(location => location.name === e.target.value);
+        console.log("Debugger", spoofLocation);
+        setSpoofCoordinates([spoofLocation.latitude, spoofLocation.longitude]);
+        setSpoofCity(spoofLocation.name);
+        if (spoofLocation) {
+            getLocation()
+                .then(local => {
+                    setApiData(sunSetSunRiseApi(local));
+                    console.log("DEBUG location", apiData);
+                    console.log("DEBUG", local);
+                    return local
+                })
+                .then(local => {
+                    let requestWeatherData = weatherApi(local);
+                    console.log("DEBUG local", local);
+                    console.log("DEBUG requestWeatherData", requestWeatherData);
+                    // setWeatherData(weatherApi(local));
+                    console.log("DEBUG Weather", weatherData);
+                })
+        }
+
+    }
+    const handleTimeAdjustment = (e) => {
+        //setTimeAdjustHour(e.target.value);
+        //Should be switch case statement
+        switch (e) {
+            case '+h':
+                setSunShiftHour(sunShiftHour + 1);
+                break;
+            case '-h':
+                setSunShiftHour(sunShiftHour - 1);
+                break;
+            case '+m':
+                setSunShiftMinute(sunShiftMinute + 1);
+                break;
+            case '-m':
+                setSunShiftMinute(sunShiftMinute - 1);
+                break;
+            case 'reset':
+                setSunShiftHour(0);
+                setSunShiftMinute(0);
+                break;
+            default:
+                break;
+        }
+        console.log("Debugger", e);
+        getLocation()
+            .then(local => {
+                setApiData(sunSetSunRiseApi(local));
+                console.log("DEBUG location", apiData);
+                console.log("DEBUG", local);
+                return local
+            })
+            .then(local => {
+                let requestWeatherData = weatherApi(local);
+                console.log("DEBUG local", local);
+                console.log("DEBUG requestWeatherData", requestWeatherData);
+                // setWeatherData(weatherApi(local));
+                console.log("DEBUG Weather", weatherData);
+            })
     }
     //get lattitude and longitude
     const getLocation = async () => {
         if (spoofLocation) {
             setLocation({
-                latitude: spoofCordinates[0],
-                longitude: spoofCordinates[1]
+                latitude: spoofCoordinates[0],
+                longitude: spoofCoordinates[1]
             });
             return ({
-                latitude: spoofCordinates[0],
-                longitude: spoofCordinates[1]
+                latitude: spoofCoordinates[0],
+                longitude: spoofCoordinates[1]
             })
         } else {
             const response = await axios.get('https://ipapi.co/json/');
@@ -125,7 +249,7 @@ const TimeTheme = ({ key, manager, flex, config }) => {
                 //https://api.sunrise-sunset.org/json?lat=34.1624&lng=-118.1275&date=today
                 //Michgan Latitude: 45.00109 | Longitude: -86.270685
                 /*
-
+ 
                 */
                 //https://api.sunrise-sunset.org/json?lat=45.00109&lng=-45.00109&date=today
                 // triggerProcess();
@@ -155,6 +279,7 @@ const TimeTheme = ({ key, manager, flex, config }) => {
             )
     }
     function processSunRise(timeSunRise) {
+        setApiSunRise(timeSunRise);
         let time = new Date();
         const sunriseTime = timeSunRise.split(':');
         let sunriseHour = parseInt(sunriseTime[0]);
@@ -167,6 +292,7 @@ const TimeTheme = ({ key, manager, flex, config }) => {
         //ADD TESTING HERE TO SEE IF IT IS DAY OR NIGHT
         let sunDate = new Date(time.getFullYear(), time.getMonth(), time.getDate(), sunriseHour + sunShiftHour, sunriseMinute + sunShiftMinute, 0, 0);
         time.setTime(sunDate.getTime());
+        console.log("Debugger", sunDate)
         setSunrise(sunDate);
         return sunDate.getTime();
 
@@ -177,13 +303,15 @@ const TimeTheme = ({ key, manager, flex, config }) => {
         const minute = parseInt(timeLengthArray[1]);
         //combine hours and minutes to miliseconds
         const dayLength = (hour * 60 * 60 * 1000) + (minute * 60 * 1000);
-        setDebug([dayLength, hour, minute]);
+        setDebug([msToTime(dayLength)]);
         setDayLength(dayLength);
         return dayLength;
     }
     function triggerProcess() {
         if (isLoaded) {
+            console.log("Debug", "triggerProcess");
             console.log("DEBUG UseState", currentTime, sunSetTime);
+            console.log("Debugger", "triggerProcess");
             //console.log("DEBUG tempDate", tempDate);
             const adj = timeAdjustHour * 60 + timeAdjustMinute;
             setSunsetDiff(sunSetTime.getTime() - currentTime.getTime());
@@ -214,7 +342,7 @@ const TimeTheme = ({ key, manager, flex, config }) => {
             }
         }
     }
-
+    //function is not working correctly as expected
     function msToTime(ms) {
         let seconds = (ms / 1000).toFixed(1);
         let minutes = (ms / (1000 * 60)).toFixed(1);
@@ -224,6 +352,9 @@ const TimeTheme = ({ key, manager, flex, config }) => {
         else if (minutes < 60) return minutes + " Min";
         else if (hours < 24) return hours + " Hrs";
         else return days + " Days"
+    }
+    function triggerProcessx() {
+
     }
 
     //geneating icon
@@ -281,7 +412,7 @@ const TimeTheme = ({ key, manager, flex, config }) => {
                     {weatherData ? <WeatherDisplay weather={weatherData} /> : "loading"}
                 </InfoBlock>
                 <InfoBlock>
-                    <FlexButton onClick={(event) => handelDebug(event)}>Debug Pannel</FlexButton>
+                    <FlexButton onClick={(event) => handleDebug(event)}>Debug Pannel</FlexButton>
                 </InfoBlock>
 
                 <Debug style={{ display: debugPannel }}>
@@ -314,7 +445,7 @@ const TimeTheme = ({ key, manager, flex, config }) => {
                         dayLength: {dayLength}
                     </InfoBlock>
                     <InfoBlock>
-                        DEBUG {debug[0]} and {debug[1]} and sunset time
+                        DEBUG {debug[0]}
                     </InfoBlock>
                     <InfoBlock>
                         Is Daylight:
@@ -332,19 +463,50 @@ const TimeTheme = ({ key, manager, flex, config }) => {
                         }
                     </InfoBlock>
                     <InfoBlock>
-                        DEBUG DIFF {debugDiff ? debugDiff : "Loading"}
+                        {
+                            `Spoof Location: ${spoofLocation}`
+                        }
                     </InfoBlock>
-                    <InfoBlock>
-                        CTL: {ctL ? ctL : null}
-                    </InfoBlock>
-                    <InfoBlock>
-                        <FlexButton onClick={() => { triggerProcessX() }}>TEST</FlexButton>
-                    </InfoBlock>
+
+
+                    <DemoBlock>
+
+                        <InfoBlock>
+                            Hours <FlexButton onClick={(e) => handleTimeAdjustment('+h')}>+</FlexButton><FlexButton onClick={(e) => handleTimeAdjustment('-h')}>-</FlexButton>&nbsp;&nbsp;
+                            Minutes <FlexButton onClick={(e) => handleTimeAdjustment('+m')}>+</FlexButton> <FlexButton onClick={(e) => handleTimeAdjustment('-m')}>-</FlexButton>
+                        </InfoBlock>
+                        <InfoBlock>
+                            <FlexButton onClick={(e) => handleTimeAdjustment('reset')}>Reset</FlexButton>
+                        </InfoBlock>
+                    </DemoBlock>
+                    <DemoBlock>
+                        <InfoBlock>
+                            <SelectSpoofLocation onChange={(e) => handleSpoofCoordinates(e)}>
+                                {
+                                    spoofableLocations.map((element) => {
+                                        return (<option key={element.name} value={element.name}>{element.name}</option>);
+                                    })
+                                }
+                            </SelectSpoofLocation>
+                            <SpanContainer>
+                                {
+                                    `Spoof Location: ${spoofCoordinates[0]}, ${spoofCoordinates[1]}`
+                                }
+                            </SpanContainer>
+                        </InfoBlock>
+                        <InfoBlock>
+                            <FlexButton onClick={(e) => handleSpoofLocations(e)}>Spoof Location</FlexButton>
+                        </InfoBlock>
+                    </DemoBlock>
                 </Debug>
             </Container>
         </div>
     )
 }
+const SpanContainer = styled("span")`
+    font-size: ${props => props.fontSize};
+    color: ${props => props.color};
+    `
 const Container = styled("div")`
     display: block;
     color: ${props => props.theme.calculated.textColor};
@@ -363,6 +525,12 @@ const FlexButton = styled("button")`
 background-color: ${props => props.theme.calculated.backgroundColor};
 
 `
-
+const DemoBlock = styled("div")`
+    display: block;
+    border:1px solid ${props => props.theme.calculated.backgroundColor};
+    `
+const SelectSpoofLocation = styled("select")`
+    display: block;
+    `
 
 export default withTheme(TimeTheme)

@@ -35,6 +35,7 @@ export default class InterfacePlugin extends FlexPlugin {
     //   }
     // });
 
+    // Extract this into new plugin when it is time. 
     flex.Actions.replaceAction("WrapupTask", (payload, original) => {
       // Only alter chat tasks:
       if (payload.task.taskChannelUniqueName !== "chat") {
@@ -44,7 +45,6 @@ export default class InterfacePlugin extends FlexPlugin {
       } else {
         return new Promise(function (resolve, reject) {
           // Send the message:
-          console.log("Debuger wtf? this is chat.", payload);
           flex.Actions.invokeAction("SendMessage", {
             body: 'Thanks for chatting. Your session is now closed.',
             channelSid: payload.task.attributes.channelSid
