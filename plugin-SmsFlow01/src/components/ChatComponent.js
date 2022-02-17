@@ -3,10 +3,11 @@ import { withTheme } from '@twilio/flex-ui';
 
 import styled from 'react-emotion';
 import qs from 'qs';
+// import { Flex } from '@twilio/flex-ui/src/FlexGlobal';
 const axios = require('axios');
 // const { fromNumber, toNumber, message, createTask } = req.body;
 
-const ChatComponent = () => {
+const ChatComponent = ({ flex }) => {
     const [message, setMessage] = useState(null);
     const [toNumber, setToNumber] = useState(null);
     const [fromNumber, setFromNumber] = useState(null);
@@ -18,7 +19,17 @@ const ChatComponent = () => {
     const [friendlyName, setFriendlyName] = useState("");
 
     // Handlers
-
+    function JuanTest() {
+        flex.Actions.invokeAction("StartOutboundCall", {
+            destination: "+16268985404",
+            outbound_to: "+16265551212",
+            taskAttributes: {
+                "to": "Fido",
+                "name": "Fido",
+                "from": "Juan",
+            }
+        })
+    }
 
     const handleMessageChange = (e) => {
         setMessage(e.target.value);
@@ -73,7 +84,11 @@ const ChatComponent = () => {
             )
         } catch (err) {
             console.log("Response Error", err);
+
         }
+        // Flex.DynamicContentStore.setData({
+        //Juan Test
+
 
     }
 
@@ -114,6 +129,9 @@ const ChatComponent = () => {
                         <ChatDiv><ChatButton onClick={() => handleSubmission()}>Send</ChatButton></ChatDiv>
                     </ChatBox>
                     <ChatBox style={{ display: { didSend } }} id="didSend">{sendMessage}</ChatBox>
+                    <ChatDiv>
+                        <ChatButton onClick={() => JuanTest()}>Juan Test</ChatButton>
+                    </ChatDiv>
 
                 </ChatBody>
             </Container>

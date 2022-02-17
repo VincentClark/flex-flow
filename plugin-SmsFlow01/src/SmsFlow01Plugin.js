@@ -18,7 +18,7 @@ export default class SmsFlow01Plugin extends FlexPlugin {
     );
     flex.ViewCollection.Content.add(
       <View name="chat-view" key="chat-view">
-        <ChatComponent key="co-chat-view" />
+        <ChatComponent key="co-chat-view" flex={flex} />
       </View>
     );
     manager.strings.NoTasksTitle = "Awaiting incoming requests...";

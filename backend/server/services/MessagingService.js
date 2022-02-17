@@ -119,8 +119,8 @@ class MessagingService {
         const channel =
             await this.client.flexApi.channel
                 .create({
-                    target: '+16268985404',
-                    identity: 'sms_16268985404',
+                    target: toNumber,
+                    identity: `sms_${toNumber.split('+')[1]}`,
                     chatUserFriendlyName: 'VincentClark',
                     chatFriendlyName: 'Chat with VincentClark',
                     flexFlowSid: flexFlowSid
@@ -135,7 +135,7 @@ class MessagingService {
                 .sessions
                 .create({
                     uniqueName: `${channel.sid}`,
-                    participants: [{ 'identifier': `${channel.sid}`, 'proxyIdentifier': `+${fromNumber}`, 'friendlyName': friendlyName }],
+                    participants: [{ 'identifier': `${channel.sid}`, 'proxyIdentifier': `+${fromNumber}`, 'friendlyName': `${toNumber.split('+')[1]}` }],
                     mode: 'message-only'
                 })
         console.log("ProxySid-3", proxySession.sid);
@@ -255,12 +255,25 @@ class MessagingService {
         console.log(channel)
 
         const sendInitialMessage = this.client.proxy.services(this.proxy_service_sid)
-            .sessions(proxySession.sid)
-            .participants(addAgent.sid)
-            .messageInteractions
-            .create({
-                body: message,
-            })
+        try {
+
+            console.log("Send Message Function")
+            return client
+                .chat
+                .services(chatServiceSid)
+                .channels(channelSid)
+                .messages
+                .create({
+                    body: messageText,
+                    from: from
+                })
+
+        } catch (error) {
+
+            //callback(error)
+            console.log(error);
+
+        }
         //     .then(message_interaction => console.log("message interaction", message_interaction))
         // console.log("channel", channel)
         // console.log("sendInitialMessage", sendInitialMessage);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { withTheme } from '@twilio/flex-ui';
+import { FlexContext, withTheme } from '@twilio/flex-ui';
 import styled from 'react-emotion';
 import FakeStoreThemeLight from './FakeStoreThemeLight';
 
@@ -20,6 +20,7 @@ const TimeTheme = ({ key, manager, flex, config }) => {
     const [apiSunRise, setApiSunRise] = useState(null);
     const [spoofLocation, setSpoofLocation] = useState(false);
     const [debugPannel, setDebugPannel] = useState('none');
+    const [debugButton, setDebugButton] = useState('block');
     //Ann Arbor Mi - 42.2808, -83.7430
     //const [spoofCoordinates, setSpoofCoordinates] = useState([-42.2808, -83.7430]);
 
@@ -96,7 +97,7 @@ const TimeTheme = ({ key, manager, flex, config }) => {
                 name: 'London',
                 latitude: 51.509865,
                 longitude: -0.118092
-            }
+            },
         ]
 
 
@@ -105,7 +106,6 @@ const TimeTheme = ({ key, manager, flex, config }) => {
 
 
     //end new sunrise / sunset states
-
     const [favicon, setFavicon] = useState(`${config.icon}1.png`);
     const [siteTitle] = useState('FakeStore Flex');
     const [location, setLocation] = useState(null);
@@ -146,6 +146,7 @@ const TimeTheme = ({ key, manager, flex, config }) => {
     const handleSpoofLocations = (e) => {
         setSpoofLocation(!spoofLocation);
     }
+
     const handleSpoofCoordinates = (e) => {
         //get value of selected spoof location
         const spoofLocation = spoofableLocations.find(location => location.name === e.target.value);
@@ -297,6 +298,7 @@ const TimeTheme = ({ key, manager, flex, config }) => {
         return sunDate.getTime();
 
     }
+
     function processDayLength(timeLength) {
         const timeLengthArray = timeLength.split(':');
         const hour = parseInt(timeLengthArray[0]);
@@ -371,6 +373,9 @@ const TimeTheme = ({ key, manager, flex, config }) => {
         document.title = siteTitle;
     }
 
+    function showHidDebugButton() {
+        setShowDebug(!showDebug);
+    }
 
     //moment js
     useEffect(() => {
@@ -409,11 +414,12 @@ const TimeTheme = ({ key, manager, flex, config }) => {
             <Container>
                 {generateFavicon()}
                 <InfoBlock>
-                    {weatherData ? <WeatherDisplay weather={weatherData} /> : "loading"}
+                    {weatherData ? <WeatherDisplay weather={weatherData} showHidDebugButton={showHidDebugButton} /> : "loading"}
                 </InfoBlock>
-                <InfoBlock>
+                <InfoBlock style={{ display: debugButton }}>
                     <FlexButton onClick={(event) => handleDebug(event)}>Debug Pannel</FlexButton>
                 </InfoBlock>
+
 
                 <Debug style={{ display: debugPannel }}>
                     <InfoBlock>
@@ -467,6 +473,9 @@ const TimeTheme = ({ key, manager, flex, config }) => {
                             `Spoof Location: ${spoofLocation}`
                         }
                     </InfoBlock>
+                    <InfoBlock>
+
+                    </InfoBlock>
 
 
                     <DemoBlock>
@@ -506,6 +515,7 @@ const TimeTheme = ({ key, manager, flex, config }) => {
 const SpanContainer = styled("span")`
     font-size: ${props => props.fontSize};
     color: ${props => props.color};
+    background-color: ${props => props.backgroundColor};
     `
 const Container = styled("div")`
     display: block;

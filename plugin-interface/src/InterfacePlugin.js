@@ -36,26 +36,26 @@ export default class InterfacePlugin extends FlexPlugin {
     // });
 
     // Extract this into new plugin when it is time. 
-    flex.Actions.replaceAction("WrapupTask", (payload, original) => {
-      // Only alter chat tasks:
-      if (payload.task.taskChannelUniqueName !== "chat") {
-        original(payload);
-        console.log("Debuger wtf? this is no chat.", payload);
-        console.log("Debuger", payload.task.taskChannelUniqueName)
-      } else {
-        return new Promise(function (resolve, reject) {
-          // Send the message:
-          flex.Actions.invokeAction("SendMessage", {
-            body: 'Thanks for chatting. Your session is now closed.',
-            channelSid: payload.task.attributes.channelSid
-          })
-            .then(response => {
-              // Wait until the message is sent to wrap-up the task:
-              resolve(original(payload));
-            });
-        });
-      }
-    });
+    // flex.Actions.replaceAction("WrapupTask", (payload, original) => {
+    //   // Only alter chat tasks:
+    //   if (payload.task.taskChannelUniqueName !== "chat") {
+    //     original(payload);
+    //     console.log("Debuger wtf? this is no chat.", payload);
+    //     console.log("Debuger", payload.task.taskChannelUniqueName)
+    //   } else {
+    //     return new Promise(function (resolve, reject) {
+    //       // Send the message:
+    //       flex.Actions.invokeAction("SendMessage", {
+    //         body: 'Thanks for chatting. Your session is now closed.',
+    //         channelSid: payload.task.attributes.channelSid
+    //       })
+    //         .then(response => {
+    //           // Wait until the message is sent to wrap-up the task:
+    //           resolve(original(payload));
+    //         });
+    //     });
+    //   }
+    // });
 
 
 
