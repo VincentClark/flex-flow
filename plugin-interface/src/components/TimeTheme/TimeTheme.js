@@ -296,7 +296,6 @@ const TimeTheme = ({ key, manager, flex, config }) => {
         console.log("Debugger", sunDate)
         setSunrise(sunDate);
         return sunDate.getTime();
-
     }
 
     function processDayLength(timeLength) {
@@ -313,7 +312,7 @@ const TimeTheme = ({ key, manager, flex, config }) => {
         if (isLoaded) {
             console.log("Debug", "triggerProcess");
             console.log("DEBUG UseState", currentTime, sunSetTime);
-            console.log("Debugger", "triggerProcess");
+            console.log("Debugger", "triggerProcess", isDayTime);
             //console.log("DEBUG tempDate", tempDate);
             const adj = timeAdjustHour * 60 + timeAdjustMinute;
             setSunsetDiff(sunSetTime.getTime() - currentTime.getTime());
@@ -323,16 +322,17 @@ const TimeTheme = ({ key, manager, flex, config }) => {
             console.log("DEBUG DIF", sunSetTime.getTime() - currentTime.getTime())
 
 
-            if (currentTime.getTime() < sunSetTime.getTime() && currentTime.getTime() > sunrise.getTime()) {
+            if (currentTime.getTime() < sunSetTime.getTime() && currentTime.getTime() > sunrise.getTime() && isDayTime === false) {
                 setIsDayTime(true);
-                console.log("DEBUG DAYTIME", isDayTime)
+                console.log("DEBUG DAYTIME Trigger Process", isDayTime)
                 manager.updateConfig({ colorTheme: FakeStoreThemeLight });
                 flex.MainHeader.defaultProps.logoUrl =
                     `${config.logo}1.png`;
                 setFavicon(`${config.icon}1.png`);
 
-            } else {
+            } else if (currentTime.getTime() > sunSetTime.getTime() && isDayTime === true) {
                 // weatherApi(location);
+                setIsDayTime(false);
                 console.log("DEBUG NOTDAYTIME", currentTime, sunSetTime)
                 console.log("DEBUG NOTDAYTIME", isDayTime)
                 manager.updateConfig({ colorTheme: FakeStoreThemeDark });
@@ -398,8 +398,7 @@ const TimeTheme = ({ key, manager, flex, config }) => {
                 console.log("DEBUG Weather", weatherData);
             })
     }, [isDayTime, spoofLocation, spoofCoordinates, sunShiftHour, sunShiftMinute])
-    useEffect(() => {
-    }, [ctS, ctH, ctL, csS, csH, csL])
+
     // have date increment by 1 every second
     useEffect(() => {
         const interval = setInterval(() => {
