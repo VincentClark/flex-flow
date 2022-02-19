@@ -1,0 +1,19 @@
+{
+  "name": "plugin-holdcall",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "postinstall": "flex-plugin pre-script-check",
+    "start": "twilio flex:plugins:start"
+  },
+  "dependencies": {
+    "flex-plugin-scripts": "4.2.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "twilio": "^3.72.0"
+  },
+  "devDependencies": {
+    "@twilio/flex-ui": "^1",
+    "react-test-renderer": "16.5.2"
+  }
+}
