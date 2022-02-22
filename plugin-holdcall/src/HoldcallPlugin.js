@@ -53,6 +53,11 @@ export default class HoldcallPlugin extends FlexPlugin {
           holdMusicMethod: "POST",
         });
       });
+      flex.Actions.addListener("beforeTransferTask", (payload) => {
+        const { task } = payload;
+
+        flex.Actions.invokeAction("HoldCall", { task: task, holdmusicURL: hold_url });
+      });
     }
     flex.NoTasksCanvas.Content.add(<HoldMusicSelection key="HoldMusic" flexInstance={Manager.getInstance()} flex={flex} createHoldMusic={createHoldMusic} />, {
       sortOrder: -1

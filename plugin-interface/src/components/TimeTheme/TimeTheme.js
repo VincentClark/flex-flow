@@ -397,7 +397,7 @@ const TimeTheme = ({ key, manager, flex, config }) => {
                 // setWeatherData(weatherApi(local));
                 console.log("DEBUG Weather", weatherData);
             })
-    }, [isDayTime, spoofLocation, spoofCoordinates, sunShiftHour, sunShiftMinute])
+    }, [isDayTime, spoofLocation, spoofCoordinates, sunShiftHour, sunShiftMinute, showDebug])
 
     // have date increment by 1 every second
     useEffect(() => {

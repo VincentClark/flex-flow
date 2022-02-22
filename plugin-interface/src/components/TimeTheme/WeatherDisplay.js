@@ -1,7 +1,7 @@
 import React from 'react';
 import { withTheme } from '@twilio/flex-ui';
 import styled from 'react-emotion';
-const WeatherDisplay = ({ weather }, showHidDebugButton = { showHidDebugButton }) => {
+const WeatherDisplay = ({ weather }, { showHidDebugButton }) => {
     const tempDegrees = () => {
         if (weather.location.country === 'United States of America' || weather.location.country === 'USA' || weather.location.country === 'US' || weather.location.country === 'United States') {
             return `${weather.current.temp_f}° F`
@@ -12,6 +12,7 @@ const WeatherDisplay = ({ weather }, showHidDebugButton = { showHidDebugButton }
     }
     function showHidDebugButton() {
         console.log("Debuger", 'showHidDebugButton')
+        showHidDebugButton();
     }
 
     return (

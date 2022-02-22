@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { FlexContext, withTheme } from '@twilio/flex-ui';
+import { FlexContext, FLEX_LOCATION_CHANGE, withTheme } from '@twilio/flex-ui';
 import styled from 'react-emotion';
 
 const HoldMusicSelection = ({ flexInstance, flex, createHoldMusic }) => {
     console.log("Muisc", createHoldMusic)
-    const holdMusicString = "Duel of Fates 02:Duel_of_Fates_02.wav,Star Wars 01:StarWars_01.wav, Your Welcome 05:YourWelcome_05.wav, Your Welcome 02:YourWelcome_02.wav,YourWelecome 04:YourWelcome_04.wav, SmoothJazz:SmoothJazz.wav, Your Welcome 01:YourWelcome_01.wav, SmoothJazz 301:SmoothJaze3_01.wav";
+    const holdMusicString = "Duel of Fates 02:Duel_of_Fates_02.wav,Star Wars 01:StarWars_01.wav, Your Welcome 05:YourWelcome_05.wav, Your Welcome 02:YourWelcome_02.wav,YourWelecome 04:YourWelcome_04.wav, SmoothJazz:SmoothJazz.wav, Your Welcome 01:YourWelcome_01.wav";
     const holdMusicArray = holdMusicString.split(",");
     const holdMusicBase = "https://fsassets-9880.twil.io/";
     const [currentHoldMusicUrl, setCurrentHoldMusicUrl] = useState(holdMusicBase + holdMusicArray[0].split(":")[1]);
+    const [currentHoldMusicName, setCurrentHoldMusicName] = useState(holdMusicArray[0].split(":")[0]);
     function HandleOptionChanged(event) {
         setCurrentHoldMusicUrl(event.target.value);
+        setCurrentHoldMusicName(event.target.name);
         console.log("music", createHoldMusic)
         // changeHoldMusic(event.target.value);
         createHoldMusic(event.target.value);
@@ -22,9 +24,16 @@ const HoldMusicSelection = ({ flexInstance, flex, createHoldMusic }) => {
         const selection = holdMusicArray.map((holdMusic) => {
             const holdMusicName = holdMusic.split(":")[0];
             const holdMusicUrl = holdMusic.split(":")[1];
-            return (
-                <FlexOption key={holdMusicUrl} value={holdMusicBase + holdMusicUrl}>{holdMusicName}</FlexOption>
-            )
+            if (holdMusicName === currentHoldMusicName) {
+                return (
+                    <FlexOption key={holdMusicName} value={holdMusicBase + holdMusicUrl} selected>{holdMusicName}</FlexOption>
+                )
+            } else {
+                return (
+                    <FlexOption key={holdMusicName} value={holdMusicBase + holdMusicUrl}>{holdMusicName}</FlexOption>
+                )
+            }
+
         })
         return selection;
     }
@@ -43,6 +52,9 @@ const HoldMusicSelection = ({ flexInstance, flex, createHoldMusic }) => {
         //     });
         // });
     }
+    // useEffect(() => {
+    //     changeHoldMusic(currentHoldMusicUrl);
+    // }, [currentHoldMusicUrl])
 
     return (
         <div>

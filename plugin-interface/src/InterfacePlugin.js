@@ -23,6 +23,7 @@ export default class InterfacePlugin extends FlexPlugin {
    */
 
   async init(flex, manager) {
+    //migrate to json file.
     const configuration = {
       icon: 'https://fsassets-9880.twil.io/FSIcon_TH',
       logo: 'https://fsassets-9880.twil.io/fslogo-fstheme',
