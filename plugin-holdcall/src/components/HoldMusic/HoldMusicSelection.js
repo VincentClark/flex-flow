@@ -2,8 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { FlexContext, FLEX_LOCATION_CHANGE, withTheme } from '@twilio/flex-ui';
 import styled from 'react-emotion';
 
-const HoldMusicSelection = ({ flexInstance, flex, createHoldMusic }) => {
+const HoldMusicSelection = (props, { flexInstance, flex, createHoldMusic }) => {
     console.log("Muisc", createHoldMusic)
+    // if (!props.isOpen) {
+    //     return null;
+    // }
+    console.log("props", props);
+
     const holdMusicString = "Duel of Fates 02:Duel_of_Fates_02.wav,Star Wars 01:StarWars_01.wav, Your Welcome 05:YourWelcome_05.wav, Your Welcome 02:YourWelcome_02.wav,YourWelecome 04:YourWelcome_04.wav, SmoothJazz:SmoothJazz.wav, Your Welcome 01:YourWelcome_01.wav";
     const holdMusicArray = holdMusicString.split(",");
     const holdMusicBase = "https://fsassets-9880.twil.io/";
@@ -15,7 +20,6 @@ const HoldMusicSelection = ({ flexInstance, flex, createHoldMusic }) => {
         console.log("music", createHoldMusic)
         // changeHoldMusic(event.target.value);
         createHoldMusic(event.target.value);
-
     }
 
 
