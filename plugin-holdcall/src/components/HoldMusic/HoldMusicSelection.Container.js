@@ -2,18 +2,18 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { Actions } from '../../states/HoldMusicState';
-import HoldMusicSelection from './HoldMusicSelection';
+import holdMusicSelection from './HoldMusicSelection';
 
 const mapStateToProps = (state) => ({
-    // isOpen: state['holdcall'].HoldMusicSelection.isOpen,
-    // currentHoldMusicUrl: state['holdcall'].HoldMusicSelection.currentHoldMusicUrl,
-    // currentHoldMusicName: state['holdcall'].HoldMusicSelection.currentHoldMusicName,
+    isOpen: state['holdcall'].holdMusicState.isOpen,
+    currentHoldMusicUrl: state['holdcall'].holdMusicState.currentHoldMusicUrl,
+    currentHoldMusicName: state['holdcall'].holdMusicState.currentHoldMusicName,
 });
 
 const mapDispatchToProps = (dispatch) => ({
     //this needs to be fixed.
-    dismissBar: bindActionCreators(Actions.dismissBar, dispatch),
+    changeHoldMusic: bindActionCreators(Actions.changeHoldMusic, dispatch),
 
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(HoldMusicSelection);
+export default connect(mapStateToProps, mapDispatchToProps)(holdMusicSelection);

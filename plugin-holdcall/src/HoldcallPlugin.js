@@ -3,7 +3,7 @@ import { Manager, VERSION } from '@twilio/flex-ui';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FlexPlugin } from 'flex-plugin';
-import HoldMusicSelection from './components/HoldMusic/HoldMusicSelection';
+import holdMusicSelection from './components/HoldMusic/HoldMusicSelection';
 import HoldMusicSelectionContainer from './components/HoldMusic/HoldMusicSelection.Container';
 //import CustomTaskListContainer from './components/CustomTaskList/CustomTaskList.Container';
 import reducers, { namespace } from './states';
@@ -43,14 +43,22 @@ export default class HoldcallPlugin extends FlexPlugin {
     this.registerReducers(manager);
     const holdMusicString = "Duel of Fates 02:Duel_of_Fates_02.wav,Star Wars 01:StarWars_01.wav, Your Welcome 05:YourWelcome_05.wav, Your Welcome 02:YourWelcome_02.wav,YourWelecome 04:YourWelcome_04.wav, SmoothJazz:SmoothJazz.wav, Your Welcome 01:YourWelcome_01.wav";
 
-    const holdMusicArray = holdMusicString.split(",");
+    //const holdMusicArray = holdMusicString.split(",");
     const holdMusicBase = "https://fsassets-9880.twil.io/";
+    const holdMusicUrl = Manager.getInstance().workerClient.attributes.hold_selection;
+
+
+    //console.log("customer", customerHoldMusic);
+    const holdMusicArray = holdMusicUrl.split(",");
+    console.log("hold-music", holdMusicArray);
+
 
     function createHoldMusic(hold_url) {
       flex.Actions.replaceAction("HoldCall", async (payload, original) => {
 
         //const holdMusicUrl = Manager.getInstance().workerClient.attributes.holdMusicUrl;
         console.log("music", hold_url);
+        console.log("music-create", hold_url);
         await new Promise((resolve, reject) => {
           resolve();
         });
@@ -66,23 +74,16 @@ export default class HoldcallPlugin extends FlexPlugin {
         flex.Actions.invokeAction("HoldCall", { task: task, holdmusicURL: hold_url });
       });
 
-
-
     }
+
+    flex.Actions.addListener("afterAcceptTask", (payload, original) => {
+      console.log("buggin", payload.task._task.attributes.holdMusic);
+    });
     const options = { sortOrder: -1 };
-    flex.AgentDesktopView.Panel1.Content.add(<HoldMusicSelectionContainer key="holdcallPlugin-component" />, options);
+    flex.AgentDesktopView.Panel1.Content.add(<HoldMusicSelectionContainer key="holdcallPlugin-component" flex={flex} createHoldMusic={createHoldMusic} holdMusicArray={holdMusicArray} />, options);
     // flex.NoTasksCanvas.Content.add(<HoldMusicSelection key="HoldMusic" flexInstance={Manager.getInstance()} flex={flex} createHoldMusic={createHoldMusic} />, {
     //   sortOrder: -1
     // });
-
-
-
-
-
-
-
-
-
   }
 
   /**

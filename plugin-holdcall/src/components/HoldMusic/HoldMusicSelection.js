@@ -2,24 +2,21 @@ import React, { useState, useEffect } from 'react'
 import { FlexContext, FLEX_LOCATION_CHANGE, withTheme } from '@twilio/flex-ui';
 import styled from 'react-emotion';
 
-const HoldMusicSelection = (props, { flexInstance, flex, createHoldMusic }) => {
-    console.log("Muisc", createHoldMusic)
+const holdMusicSelection = (props) => {
+    // console.log("Muisc", createHoldMusic)
     // if (!props.isOpen) {
     //     return null;
     // }
     console.log("props", props);
+    console.log("flex-log", props.flex);
+    console.log("flex-log-worker", props.holdMusicArray)
 
-    const holdMusicString = "Duel of Fates 02:Duel_of_Fates_02.wav,Star Wars 01:StarWars_01.wav, Your Welcome 05:YourWelcome_05.wav, Your Welcome 02:YourWelcome_02.wav,YourWelecome 04:YourWelcome_04.wav, SmoothJazz:SmoothJazz.wav, Your Welcome 01:YourWelcome_01.wav";
-    const holdMusicArray = holdMusicString.split(",");
+    const holdMusicArray = props.holdMusicArray;
     const holdMusicBase = "https://fsassets-9880.twil.io/";
-    const [currentHoldMusicUrl, setCurrentHoldMusicUrl] = useState(holdMusicBase + holdMusicArray[0].split(":")[1]);
-    const [currentHoldMusicName, setCurrentHoldMusicName] = useState(holdMusicArray[0].split(":")[0]);
     function HandleOptionChanged(event) {
-        setCurrentHoldMusicUrl(event.target.value);
-        setCurrentHoldMusicName(event.target.name);
-        console.log("music", createHoldMusic)
-        // changeHoldMusic(event.target.value);
-        createHoldMusic(event.target.value);
+        console.log("music hms", event.target.value);
+        props.changeHoldMusic(`${event.target.value}`);
+        props.createHoldMusic(event.target.value.split("|")[0]);
     }
 
 
@@ -28,42 +25,48 @@ const HoldMusicSelection = (props, { flexInstance, flex, createHoldMusic }) => {
         const selection = holdMusicArray.map((holdMusic) => {
             const holdMusicName = holdMusic.split(":")[0];
             const holdMusicUrl = holdMusic.split(":")[1];
-            if (holdMusicName === currentHoldMusicName) {
+            if (holdMusicName === props.holdMusicName) {
                 return (
-                    <FlexOption key={holdMusicName} value={holdMusicBase + holdMusicUrl} selected>{holdMusicName}</FlexOption>
+                    <FlexOption key={holdMusicName} name={holdMusicName} value={`${holdMusicBase} ${holdMusicUrl}|${holdMusicName}`} select>{holdMusicName}</FlexOption>
                 )
             } else {
                 return (
-                    <FlexOption key={holdMusicName} value={holdMusicBase + holdMusicUrl}>{holdMusicName}</FlexOption>
+                    <FlexOption key={holdMusicName} name={holdMusicName} value={`${holdMusicBase}${holdMusicUrl}|${holdMusicName}`}>{holdMusicName}</FlexOption>
                 )
             }
 
         })
         return selection;
     }
-    function changeHoldMusic(hold_url) {
-        // flex.Actions.replaceAction("HoldCall", async (payload, original) => {
-
-        //     //const holdMusicUrl = Manager.getInstance().workerClient.attributes.holdMusicUrl;
-        //     console.log("music", hold_url);
-        //     await new Promise((resolve, reject) => {
-        //         resolve();
-        //     });
-        //     original({
-        //         ...payload,
-        //         holdMusicUrl: hold_url,
-        //         holdMusicMethod: "POST",
-        //     });
-        // });
+    function applyHoldMusic(holdUrl) {
+        props.flex.Actions.replaceAction("HoldCall", async (payload, original) => {
+            //const holdMusicUrl = Manager.getInstance().workerClient.attributes.holdMusicUrl;
+            await new Promise((resolve, reject) => {
+                resolve();
+            });
+            original({
+                ...payload,
+                holdMusicUrl: holdUrl,
+                holdMusicMethod: "POST",
+            });
+        });
     }
     // useEffect(() => {
     //     changeHoldMusic(currentHoldMusicUrl);
     // }, [currentHoldMusicUrl])
+    function handleOnClick(e) {
+        props.changeHoldMusic("one:done");
+    }
 
     return (
         <div>
             <FlexInfo>
-                {`Hold Music: ${currentHoldMusicUrl}`}
+                {
+                    `State Hold Music Name: ${props.currentHoldMusicName}`
+                }
+            </FlexInfo>
+            <FlexInfo>
+                {`Hold Music: ${props.currentHoldMusicUrl}`}
             </FlexInfo>
             <FlexSelectionLabel>Hold Music: </FlexSelectionLabel>
             <FlexSelection onChange={HandleOptionChanged}>
@@ -72,6 +75,9 @@ const HoldMusicSelection = (props, { flexInstance, flex, createHoldMusic }) => {
                     createSelection(holdMusicArray)
                 }
             </FlexSelection>
+            <FlexInfo>
+                <button onClick={(e) => handleOnClick(e)}>Test</button>
+            </FlexInfo>
         </div>
     )
 }
@@ -92,4 +98,4 @@ const FlexInfo = styled('div')`
     font-size: ${props => props.theme.calculated.fontSize};
 `;
 
-export default withTheme(HoldMusicSelection);
+export default withTheme(holdMusicSelection);

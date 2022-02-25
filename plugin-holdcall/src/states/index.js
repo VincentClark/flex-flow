@@ -1,11 +1,14 @@
-import { combineReducers } from 'redux';
+import { combineReducers, createStore } from 'redux';
+import { reduce as holdMusicState } from './HoldMusicState';
+//window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 
-import { reduce as CustomMusicStateReducer } from './HoldMusicState';
-
-// Register your redux store under a unique namespace
 export const namespace = 'holdcall';
+
+//REDUCERS
 
 // Combine the reducers
 export default combineReducers({
-  customTaskList: CustomMusicStateReducer,
+  holdMusicState: holdMusicState,
 });
+
+//DISPATCH
