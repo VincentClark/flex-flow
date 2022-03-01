@@ -7,33 +7,51 @@ const holdMusicSelection = (props) => {
     // if (!props.isOpen) {
     //     return null;
     // }
+
+    //Added from front of the pluggin for now, need to put in the correct place
+    props.flex.Actions.addListener("afterAcceptTask", (payload, original) => {
+        console.log("buggin", payload.task._task.attributes.holdMusic);
+        props.setCustomerHoldMusic(payload.task._task.attributes.holdMusic, props.currentAd, props.createHoldMusic);
+    });
+
+    function updateHoldMusic(hold_url) {
+        // props.createHoldMusic();
+    }
+
+
     console.log("props", props);
     console.log("flex-log", props.flex);
     console.log("flex-log-worker", props.holdMusicArray)
 
     const holdMusicArray = props.holdMusicArray;
-    const holdMusicBase = "https://fsassets-9880.twil.io/";
-    function HandleOptionChanged(event) {
-        console.log("music hms", event.target.value);
-        props.changeHoldMusic(`${event.target.value}`);
-        props.createHoldMusic(event.target.value.split("|")[0]);
+    const holdMusicBase = "https://phone-4798.twil.io/";
+    function handleOptionChanged(event) {
+        console.log("hold-music-change", event.target.value);
+        props.changeAd(event.target.value);
+        // props.changeHoldMusic(`${event.target.value}`);
+        props.setCustomerHoldMusic(props.currentHoldMusicName, event.target.value, props.createHoldMusic);
+        //props.createHoldMusic(event.target.value.split("|")[0]);
     }
 
 
 
     function createSelection(holdMusicArray) {
+        console.log("hold-music-selection", holdMusicArray);
         const selection = holdMusicArray.map((holdMusic) => {
-            const holdMusicName = holdMusic.split(":")[0];
-            const holdMusicUrl = holdMusic.split(":")[1];
-            if (holdMusicName === props.holdMusicName) {
-                return (
-                    <FlexOption key={holdMusicName} name={holdMusicName} value={`${holdMusicBase} ${holdMusicUrl}|${holdMusicName}`} select>{holdMusicName}</FlexOption>
-                )
-            } else {
-                return (
-                    <FlexOption key={holdMusicName} name={holdMusicName} value={`${holdMusicBase}${holdMusicUrl}|${holdMusicName}`}>{holdMusicName}</FlexOption>
-                )
-            }
+            console.log("hold-music-option", holdMusic);
+            // const holdMusicName = holdMusic.split(":")[0];
+            // const holdMusicUrl = holdMusic.split(":")[1];
+
+            // if (holdMusicName === props.holdMusicName) {
+            //     return (
+            //         <FlexOption key={holdMusicName} name={holdMusicName} value={`${holdMusicBase} ${holdMusicUrl}|${holdMusicName}`} select>{holdMusicName}</FlexOption>
+            //     )
+            // } else {
+            //     return (
+            //         <FlexOption key={holdMusicName} name={holdMusicName} value={`${holdMusicBase}${holdMusicUrl}|${holdMusicName}`}>{holdMusicName}</FlexOption>
+            //     )
+            // }
+            return (<FlexOption key={holdMusic} name={holdMusic} value={holdMusic}>{holdMusic}</FlexOption>)
 
         })
         return selection;
@@ -62,40 +80,58 @@ const holdMusicSelection = (props) => {
         <div>
             <FlexInfo>
                 {
-                    `State Hold Music Name: ${props.currentHoldMusicName}`
+                    `current hold music: ${props.currentHoldMusicName}`
                 }
             </FlexInfo>
             <FlexInfo>
-                {`Hold Music: ${props.currentHoldMusicUrl}`}
+                {
+                    `Customer Hold Music Name: ${props.customerHoldMusic}`
+                }
+            </FlexInfo>
+            <FlexInfo>
+                {
+                    `Customer Ad Hold Music: ${props.customerAdHoldMusic}`
+                }
+            </FlexInfo>
+            <FlexInfo>
+                {
+                    `Current Ad: ${props.currentAd}`
+                }
+            </FlexInfo>
+            <FlexInfo>
+                {`Hold Music: ${props.currentHoldMusicName}`}
             </FlexInfo>
             <FlexSelectionLabel>Hold Music: </FlexSelectionLabel>
-            <FlexSelection onChange={HandleOptionChanged}>
+            <FlexSelection onChange={handleOptionChanged}>
+                <FlexOption key="none" value="none" name="none" selected disabled hidden>Select Option</FlexOption>
 
                 {
                     createSelection(holdMusicArray)
                 }
             </FlexSelection>
-            <FlexInfo>
-                <button onClick={(e) => handleOnClick(e)}>Test</button>
-            </FlexInfo>
         </div>
     )
 }
 const FlexSelection = styled('select')`
-background-color: ${props => props.theme.calculated.backgroundColor};
-    color: black;
+background-color: gray;
+    color: white;
 `;
 const FlexSelectionLabel = styled('label')`
-    color: ${props => props.theme.calculated.textColor};
-    font-size: ${props => props.theme.calculated.fontSize};
+padding:5px;
+font-weight: bold;
+color: ${props => props.theme.calculated.textColor};
+font-size: 14px;
 `;
 const FlexOption = styled('option')`
 
     color: black;
 `;
 const FlexInfo = styled('div')`
+    font-weight: bold;
+    background-color: darkgrey;
+    border:1px solid black;
     color: ${props => props.theme.calculated.textColor};
-    font-size: ${props => props.theme.calculated.fontSize};
+    font-size: 14px;
 `;
 
 export default withTheme(holdMusicSelection);

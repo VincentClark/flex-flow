@@ -3,7 +3,6 @@ import { Manager, VERSION } from '@twilio/flex-ui';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FlexPlugin } from 'flex-plugin';
-import holdMusicSelection from './components/HoldMusic/HoldMusicSelection';
 import HoldMusicSelectionContainer from './components/HoldMusic/HoldMusicSelection.Container';
 //import CustomTaskListContainer from './components/CustomTaskList/CustomTaskList.Container';
 import reducers, { namespace } from './states';
@@ -45,6 +44,7 @@ export default class HoldcallPlugin extends FlexPlugin {
 
     //const holdMusicArray = holdMusicString.split(",");
     const holdMusicBase = "https://fsassets-9880.twil.io/";
+    //rename this
     const holdMusicUrl = Manager.getInstance().workerClient.attributes.hold_selection;
 
 
