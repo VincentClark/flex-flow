@@ -1,21 +1,20 @@
 {
-  "name": "plugin-interface",
-  "version": "1.0.0",
+  "name": "plugin-customchat",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
     "postinstall": "flex-plugin pre-script-check",
     "start": "twilio flex:plugins:start"
   },
   "dependencies": {
-    "axios": "^0.24.0",
-    "flex-plugin-scripts": "4.2.2",
-    "qs": "^6.10.2",
+    "flex-plugin-scripts": "4.3.1",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "twilio": "^3.72.0"
+    "react-dom": "16.13.1",
+    "react-emotion": "9.2.12",
+    "redux": "^3.7.2"
   },
   "devDependencies": {
     "@twilio/flex-ui": "^1",
-    "react-test-renderer": "16.13.1"
+    "react-test-renderer": "16.5.2"
   }
 }

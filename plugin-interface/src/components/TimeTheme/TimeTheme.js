@@ -9,96 +9,83 @@ const axios = require('axios');
 
 // well you earned it, and while napping think of cool ways to integrate crypto into flex. 
 // best to get a bottle of roses first. 
-const TimeTheme = ({ key, manager, flex, config }) => {
+const TimeTheme = ({ key, manager, flex, config, response }) => {
     /*
    
 
 
     */
+
+    const [resp, setResponse] = useState(response);
+    console.log("resp", resp);
+    // console.log("response", response);
+
     const [sunShiftHour, setSunShiftHour] = useState(0);
     const [sunShiftMinute, setSunShiftMinute] = useState(0);
     const [apiSunRise, setApiSunRise] = useState(null);
     const [spoofLocation, setSpoofLocation] = useState(false);
     const [debugPannel, setDebugPannel] = useState('none');
-    const [debugButton, setDebugButton] = useState('block');
-    //Ann Arbor Mi - 42.2808, -83.7430
-    //const [spoofCoordinates, setSpoofCoordinates] = useState([-42.2808, -83.7430]);
-
-    //Melborne AU -37.813611, 144.963056
-    //  const [spoofCoordinates, setSpoofCoordinates] = useState([-37.813611, 144.963056]);
-    //York UK 53.958332, -1.080278
-    //const [spoofCoordinates, setSpoofCoordinates] = useState([53.958332, -1.080278]);
-    //Ankorage AK  61.2173,-149.863129
-    //const [spoofCoordinates, setSpoofCoordinates] = useState([61.2173, -149.863129]);
-    //Manila PH 14.583333, 120.984222
-    //const [spoofCoordinates, setSpoofCoordinates] = useState([14.5982715, 120.989144]);
-    //Athens GR 37.983333, 23.733333
-    //const [spoofCoordinates, setSpoofCoordinates] = useState([37.983333, 23.733333]);
-    //Tashkent UZ 41.316667, 69.25
-    //const [spoofCoordinates, setSpoofCoordinates] = useState([41.316667, 69.25]);
-    //San Jose Costa Rica 9.933333, -84.083333
-    //const [spoofCoordinates, setSpoofCoordinates] = useState([9.933333, -84.083333]);
-    //Rio de Janeiro BR -22.906847, -43.172896
-    //const [spoofCoordinates, setSpoofCoordinates] = useState([-22.906847, -43.172896]);
+    const [debugButton, setDebugButton] = useState('none');
     const [spoofCoordinates, setSpoofCoordinates] = useState([]);
     const [spoofCity, setSpoofCity] = useState('');
-    const spoofableLocations =
-        [
-            {
-                name: '----',
-                coordinates: [0, 0]
-            },
-            {
-                name: 'Melbourne',
-                latitude: -37.813611,
-                longitude: 144.963056
-            },
-            {
-                name: 'York',
-                latitude: 53.958332,
-                longitude: -1.080278
-            },
-            {
-                name: 'Ankorage',
-                latitude: 61.2173,
-                longitude: -149.863129
-            },
-            {
-                name: 'Manila',
-                latitude: 14.583333,
-                longitude: 120.984222
-            },
-            {
-                name: 'Athens',
-                latitude: 37.983333,
-                longitude: 23.733333
-            },
-            {
-                name: 'Tashkent',
-                latitude: 41.316667,
-                longitude: 69.25
-            },
-            {
-                name: 'San Jose',
-                latitude: 9.933333,
-                longitude: -84.083333
-            },
-            {
-                name: 'Rio de Janeiro',
-                latitude: -22.906847,
-                longitude: -43.172896
-            },
-            {
-                name: 'Ann Arbor',
-                latitude: 42.2808,
-                longitude: -83.7430
-            },
-            {
-                name: 'London',
-                latitude: 51.509865,
-                longitude: -0.118092
-            },
-        ]
+    const spoofableLocations = response.spoof.spoofableLocations;
+    // const spoofableLocations =
+    //     [
+    //         {
+    //             name: '----',
+    //             coordinates: [0, 0]
+    //         },
+    //         {
+    //             name: 'Melbourne',
+    //             latitude: -37.813611,
+    //             longitude: 144.963056
+    //         },
+    //         {
+    //             name: 'York',
+    //             latitude: 53.958332,
+    //             longitude: -1.080278
+    //         },
+    //         {
+    //             name: 'Ankorage',
+    //             latitude: 61.2173,
+    //             longitude: -149.863129
+    //         },
+    //         {
+    //             name: 'Manila',
+    //             latitude: 14.583333,
+    //             longitude: 120.984222
+    //         },
+    //         {
+    //             name: 'Athens',
+    //             latitude: 37.983333,
+    //             longitude: 23.733333
+    //         },
+    //         {
+    //             name: 'Tashkent',
+    //             latitude: 41.316667,
+    //             longitude: 69.25
+    //         },
+    //         {
+    //             name: 'San Jose',
+    //             latitude: 9.933333,
+    //             longitude: -84.083333
+    //         },
+    //         {
+    //             name: 'Rio de Janeiro',
+    //             latitude: -22.906847,
+    //             longitude: -43.172896
+    //         },
+    //         {
+    //             name: 'Ann Arbor',
+    //             latitude: 42.2808,
+    //             longitude: -83.7430
+    //         },
+    //         {
+    //             name: 'London',
+    //             latitude: 51.509865,
+    //             longitude: -0.118092
+    //         },
+    //     ]
 
 
 
@@ -106,8 +93,9 @@ const TimeTheme = ({ key, manager, flex, config }) => {
 
 
     //end new sunrise / sunset states
-    const [favicon, setFavicon] = useState(`${config.icon}1.png`);
-    const [siteTitle] = useState('FakeStore Flex');
+    // const [favicon, setFavicon] = useState(`${resp.base_url}${resp.brand.favicon}_light.png`);
+    const [favicon, setFavicon] = useState(`${resp.base_url}${resp.brand.favicon}_lite.png`);
+    const [siteTitle] = useState(`${response.brand.title}`);
     const [location, setLocation] = useState(null);
     const [currentTime, setCurrentTime] = useState(new Date());
     const [debug, setDebug] = useState([]);
@@ -122,19 +110,8 @@ const TimeTheme = ({ key, manager, flex, config }) => {
     const [timeAdjustMinute, setTimeAdjustMinute] = useState();
     const [isLoaded, setIsLoaded] = useState(false);
     const [timeUntilSunset, setTimeUntilSunset] = useState(null);
-
-
-    const [ctH, setCTH] = useState(26);
-    const [ctS, setCTS] = useState(91);
-    const [ctL, setCTL] = useState(55);
-    const [csH, setCSH] = useState(280);
-    const [csS, setCSS] = useState(16);
-    const [csL, setCSL] = useState(93);
-    const [cTangerineLight, setCTangerinLight] = useState('HSL(26, 91%, 23%)'); // lighter version of cTangerine
-    const [cSolitude, setCSolitude] = useState('HSL(280, 16%, 93%)');
+    const [showDebug, setShowDebug] = useState(false);
     const [sunsetDiff, setSunsetDiff] = useState(null);
-    const [lightTheme, setLightTheme] = useState(true);
-    const [debugDiff, setDebugDiff] = useState(0);
     //weather information
     const [weatherData, setWeatherData] = useState(null);
 
@@ -142,7 +119,18 @@ const TimeTheme = ({ key, manager, flex, config }) => {
     const handleDebug = (e) => {
         (debugPannel === "block") ? setDebugPannel("none") : setDebugPannel("block");
     }
-
+    function generateFavicon(icon) {
+        //const favicon = document.querySelector('link[rel="icon"]');
+        let link = document.querySelector("link[rel~='icon']");
+        if (!link) {
+            link = document.createElement('link');
+            link.rel = 'icon';
+            document.getElementsByTagName('head')[0].appendChild(link);
+        }
+        console.log("favicon", favicon);
+        link.href = favicon;
+        document.title = siteTitle;
+    }
     const handleSpoofLocations = (e) => {
         setSpoofLocation(!spoofLocation);
     }
@@ -150,7 +138,6 @@ const TimeTheme = ({ key, manager, flex, config }) => {
     const handleSpoofCoordinates = (e) => {
         //get value of selected spoof location
         const spoofLocation = spoofableLocations.find(location => location.name === e.target.value);
-        console.log("Debugger", spoofLocation);
         setSpoofCoordinates([spoofLocation.latitude, spoofLocation.longitude]);
         setSpoofCity(spoofLocation.name);
         if (spoofLocation) {
@@ -239,7 +226,7 @@ const TimeTheme = ({ key, manager, flex, config }) => {
         setWeatherData(response.data);
         //return response.data;
     }
-
+    console.log("response_data", `${resp.base_url}${resp.brand.favicon}_light.png`);
     const sunSetSunRiseApi = async (local) => {
         const response = await axios.get(`https://api.sunrise-sunset.org/json?lat=${local.latitude}&lng=${local.longitude}&date=today`)
             .then(response => {
@@ -265,14 +252,19 @@ const TimeTheme = ({ key, manager, flex, config }) => {
                     setIsDayTime(true);
                     manager.updateConfig({ colorTheme: FakeStoreThemeLight });
                     flex.MainHeader.defaultProps.logoUrl =
-                        `${config.logo}1.png`;
-                    setFavicon(`${config.icon}1.png`);
+                        `${resp.base_url}${resp.logo.logo_name}_light${resp.logo.logo_extension}`;
+                    // setFavicon(`${resp.base_url}${resp.brand.favicon}_light.png`);
+                    //  setFavicon(`${config.icon}1.png`);
+                    setFavicon(`${resp.base_url}${resp.brand.favicon}_lite.png`);
+                    generateFavicon();
+                    console.log("fav-api", `${favicon}`);
                 } else {
                     setIsDayTime(false);
+                    generateFavicon();
                     manager.updateConfig({ colorTheme: FakeStoreThemeDark });
                     flex.MainHeader.defaultProps.logoUrl =
-                        `${config.logo}2.png`;
-                    setFavicon(`${config.logo}2.png`);
+                        `${resp.base_url}${resp.logo.logo_name}_dark${resp.logo.logo_extension}`;
+                    setFavicon(`${resp.base_url}${resp.brand.favicon}_dark.png`);
                 }
                 //triggerProcess();
                 return [response.data, local];
@@ -327,8 +319,9 @@ const TimeTheme = ({ key, manager, flex, config }) => {
                 console.log("DEBUG DAYTIME Trigger Process", isDayTime)
                 manager.updateConfig({ colorTheme: FakeStoreThemeLight });
                 flex.MainHeader.defaultProps.logoUrl =
-                    `${config.logo}1.png`;
-                setFavicon(`${config.icon}1.png`);
+                    `${resp.base_url}${resp.logo.logo_name}_light${resp.logo.logo_extension}`;
+                //  setFavicon(config.icon);
+
 
             } else if (currentTime.getTime() > sunSetTime.getTime() && isDayTime === true) {
                 // weatherApi(location);
@@ -337,10 +330,11 @@ const TimeTheme = ({ key, manager, flex, config }) => {
                 console.log("DEBUG NOTDAYTIME", isDayTime)
                 manager.updateConfig({ colorTheme: FakeStoreThemeDark });
                 flex.MainHeader.defaultProps.logoUrl =
-                    `${config.logo}2.png`;
+                    `${resp.base_url}${resp.logo.logo_name}_light${resp.logo.logo_extension}`;
                 //https://fsassets-9880.twil.io/fslogo-fstheme2.png
                 setIsDayTime(false);
-                setFavicon(`${config.icon}2.png`)
+                //  setFavicon(`${resp.base_url}${resp.brand.favicon}_dark.png`);
+
             }
         }
     }
@@ -355,27 +349,23 @@ const TimeTheme = ({ key, manager, flex, config }) => {
         else if (hours < 24) return hours + " Hrs";
         else return days + " Days"
     }
-    function triggerProcessx() {
-
-    }
 
     //geneating icon
     //favicon test
-    function generateFavicon(icon) {
-        //const favicon = document.querySelector('link[rel="icon"]');
-        let link = document.querySelector("link[rel~='icon']");
-        if (!link) {
-            link = document.createElement('link');
-            link.rel = 'icon';
-            document.getElementsByTagName('head')[0].appendChild(link);
-        }
-        link.href = favicon;
-        document.title = siteTitle;
-    }
+
 
     function showHidDebugButton() {
-        setShowDebug(!showDebug);
+        //   setShowDebug(true);
+        if (debugButton === 'block') {
+            setDebugButton('none');
+        } else {
+            setDebugButton('block');
+        }
+
+        console.log("zap", showDebug);
     }
+    //twilio flex:plugins:deploy --major --changelog "Added Time based theme with weather display" --description "Time based theme plugin with quotes and weather display"
+    //twilio flex:plugins:release --name "Time Theme" --description "Time based theme plugin with quotes and weather display" --plugin plugin-interface@1.0.0​
 
     //moment js
     useEffect(() => {
@@ -397,7 +387,7 @@ const TimeTheme = ({ key, manager, flex, config }) => {
                 // setWeatherData(weatherApi(local));
                 console.log("DEBUG Weather", weatherData);
             })
-    }, [isDayTime, spoofLocation, spoofCoordinates, sunShiftHour, sunShiftMinute, showDebug])
+    }, [isDayTime, spoofLocation, spoofCoordinates, sunShiftHour, sunShiftMinute])
 
     // have date increment by 1 every second
     useEffect(() => {
@@ -408,10 +398,11 @@ const TimeTheme = ({ key, manager, flex, config }) => {
         return () => clearInterval(interval);
     }, [currentTime]);
 
+
     return (
         <div>
             <Container>
-                {generateFavicon()}
+
                 <InfoBlock>
                     {weatherData ? <WeatherDisplay weather={weatherData} showHidDebugButton={showHidDebugButton} /> : "loading"}
                 </InfoBlock>
