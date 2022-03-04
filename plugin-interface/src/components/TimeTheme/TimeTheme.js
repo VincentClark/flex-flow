@@ -1,43 +1,43 @@
 import React, { useState, useEffect } from 'react'
 import { FlexContext, withTheme } from '@twilio/flex-ui';
 import styled from 'react-emotion';
-import FakeStoreThemeLight from './FakeStoreThemeLight';
-
-import FakeStoreThemeDark from './FakeStoreThemeDark';
+import FakeStoreThemeLight from './themes/FakeStoreThemeLight';
+import FakeStoreThemeDark from './themes/FakeStoreThemeDark';
 import WeatherDisplay from './WeatherDisplay';
+require('dotenv').config()
 const axios = require('axios');
 
 // well you earned it, and while napping think of cool ways to integrate crypto into flex. 
 // best to get a bottle of roses first. 
 const TimeTheme = ({ key, manager, flex, config, response }) => {
-    async function initConfig() {
-        try {
-            const responseAxios = async () => {
-                const axiosResponse = await axios.get('https://configdata-6860.twil.io/config.json')
-                    .then((axiosResponse) => {
-                        const remoteResponseString = JSON.stringify(axiosResponse.data);
-                        const remoteResponse = JSON.parse(remoteResponseString);
-                        console.log("xxxconf", "remote", remoteResponse);
-                        return remoteResponse
-                    })
-                    .then((remoteResponse) => {
+    // async function initConfig() {
+    //     try {
+    //         const responseAxios = async (localResponse) => {
+    //             const axiosResponse = await axios.get('https://configdata-6860.twil.io/config.json')
+    //                 .then((axiosResponse) => 
+    //                     const remoteResponseString = JSON.stringify(axiosResponse.data);
+    //                     const remoteResponse = JSON.parse(remoteResponseString);
+    //                     console.log("xxxconf", "remote", remoteResponse);
+    //                     return remoteResponse
+    //                 })
+    //                 .then((remoteResponse) => {
 
-                        return remoteResponse;
-                    })
-                    .catch((error) => {
-                        console.log("xxxconf", "error", error);
-                        return localResponse;
-                    }
-                    );
-                return responseAxios;
-            }
-            const response = await responseAxios();
-            console.log("xxxconf", "response", response);
-        } catch (error) {
-            console.log("xxxconf", "error", error);
-            return localResponse;
-        }
-    }
+    //                     return remoteResponse;
+    //                 })
+    //                 .catch((error) => {
+    //                     console.log("xxxconf", "error", error);
+    //                     return localResponse;
+    //                 }
+    //                 );
+    //             return responseAxios;
+    //         }
+    //         const response = await responseAxios();
+    //         console.log("xxxconf", "response", response);
+    //     } catch (error) {
+    //         console.log("xxxconf", "error", error);
+    //         return localResponse;
+    //     }
+    // }
     /*
    
 
@@ -185,7 +185,8 @@ const TimeTheme = ({ key, manager, flex, config, response }) => {
     }
     const weatherApi = async (local) => {
         //put api key into env variable and use it here
-        const response = await axios.get(`https://api.weatherapi.com/v1/current.json?key=83b93cfd8523492ca26194608220802&q=${local.latitude},${local.longitude}&appid=b1b15e88fa797225412429c1c50c122a1`);
+
+        const response = await axios.get(`https://api.weatherapi.com/v1/current.json?key=${resp.weather_api_key}&q=${local.latitude},${local.longitude}&appid=b1b15e88fa797225412429c1c50c122a1`);
         //const response = await axios.get(`https://api.weatherapi.com/v1/current.json?key=83b93cfd8523492ca26194608220802&q=48107&lang=en&units=m`);
         //https://api.weatherapi.com/v1/current.json?key=83b93cfd8523492ca26194608220802&q=34.1624,-118.1275&appid=b1b15e88fa797225412429c1c50c122a1
         console.log("DEBUG WEATHERAPI RESPONSE", response)
@@ -298,10 +299,7 @@ const TimeTheme = ({ key, manager, flex, config, response }) => {
                 manager.updateConfig({ colorTheme: FakeStoreThemeDark });
                 flex.MainHeader.defaultProps.logoUrl =
                     `${resp.base_url}${resp.logo.logo_name}_light${resp.logo.logo_extension}`;
-                //https://fsassets-9880.twil.io/fslogo-fstheme2.png
                 setIsDayTime(false);
-                //  setFavicon(`${resp.base_url}${resp.brand.favicon}_dark.png`);
-
             }
         }
     }
@@ -331,8 +329,7 @@ const TimeTheme = ({ key, manager, flex, config, response }) => {
 
         console.log("zap", showDebug);
     }
-    //twilio flex:plugins:deploy --major --changelog "Added Time based theme with weather display" --description "Time based theme plugin with quotes and weather display"
-    //twilio flex:plugins:release --name "Time Theme" --description "Time based theme plugin with quotes and weather display" --plugin plugin-interface@1.0.0​
+
 
     //moment js
     useEffect(() => {
