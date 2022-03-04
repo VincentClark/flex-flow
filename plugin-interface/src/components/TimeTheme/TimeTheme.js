@@ -10,6 +10,34 @@ const axios = require('axios');
 // well you earned it, and while napping think of cool ways to integrate crypto into flex. 
 // best to get a bottle of roses first. 
 const TimeTheme = ({ key, manager, flex, config, response }) => {
+    async function initConfig() {
+        try {
+            const responseAxios = async () => {
+                const axiosResponse = await axios.get('https://configdata-6860.twil.io/config.json')
+                    .then((axiosResponse) => {
+                        const remoteResponseString = JSON.stringify(axiosResponse.data);
+                        const remoteResponse = JSON.parse(remoteResponseString);
+                        console.log("xxxconf", "remote", remoteResponse);
+                        return remoteResponse
+                    })
+                    .then((remoteResponse) => {
+
+                        return remoteResponse;
+                    })
+                    .catch((error) => {
+                        console.log("xxxconf", "error", error);
+                        return localResponse;
+                    }
+                    );
+                return responseAxios;
+            }
+            const response = await responseAxios();
+            console.log("xxxconf", "response", response);
+        } catch (error) {
+            console.log("xxxconf", "error", error);
+            return localResponse;
+        }
+    }
     /*
    
 
@@ -28,69 +56,7 @@ const TimeTheme = ({ key, manager, flex, config, response }) => {
     const [debugButton, setDebugButton] = useState('none');
     const [spoofCoordinates, setSpoofCoordinates] = useState([]);
     const [spoofCity, setSpoofCity] = useState('');
-    const spoofableLocations = response.spoof.spoofableLocations;
-    // const spoofableLocations =
-    //     [
-    //         {
-    //             name: '----',
-    //             coordinates: [0, 0]
-    //         },
-    //         {
-    //             name: 'Melbourne',
-    //             latitude: -37.813611,
-    //             longitude: 144.963056
-    //         },
-    //         {
-    //             name: 'York',
-    //             latitude: 53.958332,
-    //             longitude: -1.080278
-    //         },
-    //         {
-    //             name: 'Ankorage',
-    //             latitude: 61.2173,
-    //             longitude: -149.863129
-    //         },
-    //         {
-    //             name: 'Manila',
-    //             latitude: 14.583333,
-    //             longitude: 120.984222
-    //         },
-    //         {
-    //             name: 'Athens',
-    //             latitude: 37.983333,
-    //             longitude: 23.733333
-    //         },
-    //         {
-    //             name: 'Tashkent',
-    //             latitude: 41.316667,
-    //             longitude: 69.25
-    //         },
-    //         {
-    //             name: 'San Jose',
-    //             latitude: 9.933333,
-    //             longitude: -84.083333
-    //         },
-    //         {
-    //             name: 'Rio de Janeiro',
-    //             latitude: -22.906847,
-    //             longitude: -43.172896
-    //         },
-    //         {
-    //             name: 'Ann Arbor',
-    //             latitude: 42.2808,
-    //             longitude: -83.7430
-    //         },
-    //         {
-    //             name: 'London',
-    //             latitude: 51.509865,
-    //             longitude: -0.118092
-    //         },
-    //     ]
-
-
-
-    //END spoof code
-
+    const spoofableLocations = resp.spoof.spoofableLocations;
 
     //end new sunrise / sunset states
     // const [favicon, setFavicon] = useState(`${resp.base_url}${resp.brand.favicon}_light.png`);
@@ -119,6 +85,7 @@ const TimeTheme = ({ key, manager, flex, config, response }) => {
     const handleDebug = (e) => {
         (debugPannel === "block") ? setDebugPannel("none") : setDebugPannel("block");
     }
+
     function generateFavicon(icon) {
         //const favicon = document.querySelector('link[rel="icon"]');
         let link = document.querySelector("link[rel~='icon']");

@@ -108,40 +108,6 @@ export default class InterfacePlugin extends FlexPlugin {
       logo: 'https://fsassets-9880.twil.io/fslogo-fstheme',
       title: 'Fake Store Flex'
     }
-    try {
-      const responseAxios = async () => {
-        const axiosResponse = await axios.get('https://configdata-6860.twil.io/config.json')
-          .then((axiosResponse) => {
-            const remoteResponseString = JSON.stringify(axiosResponse.data);
-            const remoteResponse = JSON.parse(remoteResponseString);
-            console.log("xxxconf", "remote", remoteResponse);
-            return remoteResponse
-          })
-          .then((remoteResponse) => {
-            flex.NoTasksCanvas.Content.add(<TimeTheme key="timeTheme" manager={manager} flex={flex} config={configuration} response={remoteResponse} />, {
-              sortOrder: -1
-            });
-
-
-            flex.NoTasksCanvas.Content.add(<QuoteComponent key="qotd" />, {
-              sortOrder: -1
-            });
-            return remoteResponse;
-          })
-
-          .catch((error) => {
-            console.log("xxxconf", "error", error);
-            return localResponse;
-          }
-          );
-        return responseAxios;
-      }
-      const response = responseAxios();
-      console.log("xxxconf", "response", response);
-    } catch (error) {
-      console.log("xxxconf", "error", error);
-      return localResponse;
-    }
 
 
 
@@ -153,7 +119,14 @@ export default class InterfacePlugin extends FlexPlugin {
     flex.NoTasksCanvas.Content.remove('hint');
 
 
+    flex.NoTasksCanvas.Content.add(<TimeTheme key="timeTheme" manager={manager} flex={flex} config={configuration} response={localResponse} />, {
+      sortOrder: -1
+    });
 
+
+    flex.NoTasksCanvas.Content.add(<QuoteComponent key="qotd" />, {
+      sortOrder: -1
+    });
 
   }
 
