@@ -1,4 +1,5 @@
 const twilio = require('twilio');
+const Chat = require('twilio/lib/rest/Chat');
 const { FactorPage } = require('twilio/lib/rest/verify/v2/service/entity/factor');
 
 // customers name
@@ -169,7 +170,7 @@ class MessagingService {
         console.log('5-Message sent!', sendMessage);
     }
 
-    async strategyAOutboundSMS(toNumber = "+16268985404", fromNumber = '+14153389812', friendlyName = "Valued Customer", message = "Hello World", createTask = 'true', fromAgent = "Friendly Agent") {
+    async strategyAOutboundSMS(toNumber = "+16268985404", fromNumber = '14153389812', friendlyName = "Valued Customer", message = "Hello World", createTask = 'true', fromAgent = "Friendly Agent") {
         console.log("StratA")
         const flexFlowSid = this.flex_flow_sid_a;
         const taskAttributes = {
@@ -207,6 +208,7 @@ class MessagingService {
                 mode: 'message-only',
                 participants: [{
                     'Identifier': `${toNumber}`,
+                    'ProxyIdentifier': `+${fromNumber}`,
                 }]
             })
             .then(session => {
@@ -224,7 +226,6 @@ class MessagingService {
                 .sessions(proxySession.sid)
                 .participants
                 .create({
-                    proxyIdentifier: `+${fromNumber}`,
                     friendlyName: `${toNumber}`,
                     identifier: channel.sid
                 })
@@ -256,16 +257,17 @@ class MessagingService {
 
         const sendInitialMessage = this.client.proxy.services(this.proxy_service_sid)
         try {
+            console.log("ChatServiceSid", this.chat_service_sid);
 
             console.log("Send Message Function")
-            return client
+            return this.client
                 .chat
-                .services(chatServiceSid)
-                .channels(channelSid)
+                .services(this.chat_service_sid)
+                .channels(channel.sid)
                 .messages
                 .create({
-                    body: messageText,
-                    from: from
+                    body: message,
+                    from: `+${fromNumber}`,
                 })
 
         } catch (error) {

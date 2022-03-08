@@ -1,6 +1,6 @@
 {
    "base_url": "https://phone-4798.twil.io/",
-   "weather_api_key":"xxxxxxxxxxxx",
+   "weather_api_key":"83b93cfd8523492ca26194608220802",
     "logo": {
       "logo_name": "phone_logo",
       "logo_extension": ".png"
