@@ -84,7 +84,6 @@ class MessagingService {
         return (channel);
     }
 
-
     async createChannel(toNumber = "+16268985404", fromNumber = this.twilio_phone_number, friendlyName = "Valued Customer", message = "Hello World", createTask = 'false', fromAgent = "Friendly Agent") {
         console.log("createChannel")
         const flexFlowSid = this.flex_flow_sid_a;
@@ -109,7 +108,6 @@ class MessagingService {
         }).catch(err => {
             console.log("ERROR", err)
         })
-
     }
 
     async strategyBOutboundSMS(toNumber = "+16268985404", fromNumber = this.twilio_phone_number, friendlyName = "Valued Customer", message = "Hello World", createTask = 'false', fromAgent = "Friendly Agent") {
@@ -182,7 +180,7 @@ class MessagingService {
             autoAnswer: 'true'
         }
         const channel = await this.client.flexApi.channel.create({
-            target: `+${toNumber}`,
+            target: `${toNumber}`,
             taskAttributes: JSON.stringify(taskAttributes),
             identity: `sms_${fromNumber}`,
             chatFriendlyName: `chat user ${friendlyName}`,
@@ -201,6 +199,7 @@ class MessagingService {
         // console.log("chatTaskAttributes", chatTaskAttributes);
         // Stragegy 1
         console.log("Starting Proxy Session", channel);
+        // BLOCKING THIS OUT BECAUSE IT IS DIFFERENT THAN THE INSTRUCTIONS
         const proxySession = await this.client.proxy.services(this.proxy_service_sid)
             .sessions
             .create({
@@ -209,6 +208,7 @@ class MessagingService {
                 participants: [{
                     'Identifier': `${toNumber}`,
                     'ProxyIdentifier': `+${fromNumber}`,
+                    'FriendlyName': `${toNumber.split('+')[1]}`
                 }]
             })
             .then(session => {
@@ -216,6 +216,8 @@ class MessagingService {
                 return (session);
             }
             )
+        // const proxySession = await this.client.proxy.service(this.proxy_service_sid)
+        //     .sessions(channel.sid)
 
         console.log("ProxySid-3", proxySession.sid);
         //console.log("chat sid", this.channel_sid);
@@ -239,7 +241,8 @@ class MessagingService {
                         .fetch()
                         .then(
                             attributes => {
-                                return Object.assign(JSON.parse(attributes.attributes), { proxySession: proxySession.sid })
+                                console.log("attributes", attributes, attributes.attributes);
+                                return Object.assign(JSON.parse(attributes.attributes), { proxySession: proxySession.sid, identifier: toNumber })
                             }
                         ))
                 })
