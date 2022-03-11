@@ -2,7 +2,7 @@ import React from 'react';
 import { Manager, VERSION } from '@twilio/flex-ui';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { FlexPlugin } from 'flex-plugin';
+import { FlexPlugin } from '@twilio/flex-plugin';
 import HoldMusicSelectionContainer from './components/HoldMusic/HoldMusicSelection.Container';
 //import CustomTaskListContainer from './components/CustomTaskList/CustomTaskList.Container';
 import reducers, { namespace } from './states';
@@ -54,6 +54,7 @@ export default class HoldcallPlugin extends FlexPlugin {
 
 
     function createHoldMusic(hold_url) {
+
       flex.Actions.replaceAction("HoldCall", async (payload, original) => {
 
         //const holdMusicUrl = Manager.getInstance().workerClient.attributes.holdMusicUrl;

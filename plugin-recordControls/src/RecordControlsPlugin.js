@@ -1,4 +1,4 @@
-import { FlexPlugin } from 'flex-plugin';
+import { FlexPlugin } from '@twilio/flex-plugin';
 import React from 'react';
 import RecordControlsComponent from './RecordControlsComponent';
 

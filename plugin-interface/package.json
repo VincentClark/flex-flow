@@ -9,14 +9,15 @@
   "dependencies": {
     "axios": "^0.24.0",
     "dotenv": "^16.0.0",
-    "flex-plugin-scripts": "4.2.2",
     "qs": "^6.10.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "twilio": "^3.72.0"
+    "twilio": "^3.72.0",
+    "@twilio/flex-plugin-scripts": "5.0.4",
+    "react-emotion": "9.2.12"
   },
   "devDependencies": {
     "@twilio/flex-ui": "^1",
-    "react-test-renderer": "16.13.1"
+    "react-test-renderer": "^16.13.1"
   }
 }

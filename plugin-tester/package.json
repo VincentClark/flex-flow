@@ -1,21 +1,19 @@
 {
-  "name": "plugin-holdcall",
+  "name": "plugin-tester",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "postinstall": "flex-plugin pre-script-check",
-    "start": "twilio flex:plugins:start"
+    "start" : "twilio flex:plugins:start" 
   },
   "dependencies": {
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "redux": "^3.7.2",
-    "twilio": "^3.72.0",
     "@twilio/flex-plugin-scripts": "5.0.4",
+    "react": "16.5.2",
+    "react-dom": "16.5.2",
     "react-emotion": "9.2.12"
   },
   "devDependencies": {
     "@twilio/flex-ui": "^1",
-    "react-test-renderer": "^16.13.1"
+    "react-test-renderer": "16.5.2"
   }
 }

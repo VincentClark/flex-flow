@@ -1,13 +1,13 @@
 import React from 'react';
 import { VERSION } from '@twilio/flex-ui';
-import { FlexPlugin } from 'flex-plugin';
+import { FlexPlugin } from '@twilio/flex-plugin';
 
 import CustomTaskListContainer from './components/CustomTaskList/CustomTaskList.Container';
 import reducers, { namespace } from './states';
 
-const PLUGIN_NAME = 'XxxxxPlugin';
+const PLUGIN_NAME = 'TesterPlugin';
 
-export default class XxxxxPlugin extends FlexPlugin {
+export default class TesterPlugin extends FlexPlugin {
   constructor() {
     super(PLUGIN_NAME);
   }
@@ -23,7 +23,11 @@ export default class XxxxxPlugin extends FlexPlugin {
     this.registerReducers(manager);
 
     const options = { sortOrder: -1 };
-    flex.AgentDesktopView.Panel1.Content.add(<CustomTaskListContainer key="XxxxxPlugin-component" />, options);
+    flex.AgentDesktopView.Panel1.Content.add(<CustomTaskListContainer key="TesterPlugin-component" />, options);
+    flex.Actions.addListener("beforeAcceptTask", (payload) => {
+      console.log("beforeAcceptTask", payload);
+    }
+    );
   }
 
   /**

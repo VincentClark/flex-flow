@@ -1,6 +1,6 @@
 import React from 'react';
 import { VERSION, View } from '@twilio/flex-ui';
-import { FlexPlugin } from 'flex-plugin';
+import { FlexPlugin } from '@twilio/flex-plugin';
 
 import ChatNavButton from './components/ChatNavButton';
 import ChatComponent from './components/ChatComponent';

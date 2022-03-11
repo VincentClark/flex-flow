@@ -1,0 +1,101 @@
+{
+    "description": "A New Flow",
+    "states": [
+      {
+        "name": "Trigger",
+        "type": "trigger",
+        "transitions": [
+          {
+            "next": "Greetings",
+            "event": "incomingMessage"
+          },
+          {
+            "event": "incomingCall"
+          },
+          {
+            "event": "incomingRequest"
+          },
+          {
+            "event": "incomingParent"
+          }
+        ],
+        "properties": {
+          "offset": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      },
+      {
+        "name": "Question_01",
+        "type": "send-and-wait-for-reply",
+        "transitions": [
+          {
+            "next": "set_variables_1",
+            "event": "incomingMessage"
+          },
+          {
+            "event": "timeout"
+          },
+          {
+            "event": "deliveryFailure"
+          }
+        ],
+        "properties": {
+          "offset": {
+            "x": -50,
+            "y": 450
+          },
+          "service": "{{trigger.message.InstanceSid}}",
+          "channel": "{{trigger.message.ChannelSid}}",
+          "from": "{{flow.channel.address}}",
+          "body": "What is your name?",
+          "timeout": "3600"
+        }
+      },
+      {
+        "name": "Greetings",
+        "type": "send-message",
+        "transitions": [
+          {
+            "next": "Question_01",
+            "event": "sent"
+          },
+          {
+            "event": "failed"
+          }
+        ],
+        "properties": {
+          "offset": {
+            "x": -50,
+            "y": 180
+          },
+          "service": "{{trigger.message.InstanceSid}}",
+          "channel": "{{trigger.message.ChannelSid}}",
+          "from": "{{flow.channel.address}}",
+          "to": "{{contact.channel.address}}",
+          "body": "Hello, Welcome to Phasmo Huntners of Overworld Nether Entities."
+        }
+      },
+      {
+        "name": "set_variables_1",
+        "type": "set-variables",
+        "transitions": [
+          {
+            "event": "next"
+          }
+        ],
+        "properties": {
+          "variables": [],
+          "offset": {
+            "x": -40,
+            "y": 680
+          }
+        }
+      }
+    ],
+    "initial_state": "Trigger",
+    "flags": {
+      "allow_concurrent_calls": true
+    }
+  }

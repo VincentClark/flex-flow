@@ -1,6 +1,6 @@
 import React from 'react';
 import { VERSION } from '@twilio/flex-ui';
-import { FlexPlugin } from 'flex-plugin';
+import { FlexPlugin } from '@twilio/flex-plugin';
 import QuoteComponent from './components/Quote/Quote';
 import reducers, { namespace } from './states';
 import TimeTheme from './components/TimeTheme/TimeTheme';

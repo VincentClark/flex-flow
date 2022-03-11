@@ -1,9 +1,8 @@
 import React from 'react';
 import { VERSION } from '@twilio/flex-ui';
 import { FlexPlugin } from 'flex-plugin';
-
-import CustomTaskListContainer from './components/CustomChat/CustomChatComponent.Container';
 import reducers, { namespace } from './states';
+import CustomChatComponent from './components/CustomChat/CustomChatComponent.Container';
 
 const PLUGIN_NAME = 'CustomchatPlugin';
 
@@ -23,7 +22,7 @@ export default class CustomchatPlugin extends FlexPlugin {
     this.registerReducers(manager);
 
     const options = { sortOrder: -1 };
-    flex.AgentDesktopView.Panel1.Content.add(<CustomTaskListContainer key="CustomchatPlugin-component" />, options);
+    flex.AgentDesktopView.Panel1.Content.add(<CustomChatComponent key="customChat" />, options);
   }
 
   /**
