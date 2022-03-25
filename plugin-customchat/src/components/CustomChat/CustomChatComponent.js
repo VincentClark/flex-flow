@@ -39,32 +39,8 @@ import { FlexContext, FLEX_LOCATION_CHANGE, withTheme } from '@twilio/flex-ui';
 // It is recommended to keep components stateless and use redux for managing states
 const CustomChatComponent = (props) => {
 
-  flex.Actions.addListener("beforeAcceptTask", (payload, abortFunction) => {
-    console.log("buggin", 'you are accepting a task');
-    if (!window.confirm("Are you sure you want to accept the task?")) {
-      abortFunction();
-    }
-  });
 
-  flex.Actions.replaceAction("WrapupTask", (payload, original) => {
-    // Only alter chat tasks:
-    if (payload.task.taskChannelUniqueName !== "chat") {
-      original(payload);
-      console.log("Debuger", payload.task.taskChannelUniqueName)
-    } else {
-      return new Promise(function (resolve, reject) {
-        // Send the message:
-        flex.Actions.invokeAction("SendMessage", {
-          body: 'Thanks for chatting. Your session is now closed.',
-          channelSid: payload.task.attributes.channelSid
-        })
-          .then(response => {
-            // Wait until the message is sent to wrap-up the task:
-            resolve(original(payload));
-          });
-      });
-    }
-  });
+
   return (
     <>
       CustomChatComponent

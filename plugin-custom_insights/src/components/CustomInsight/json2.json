@@ -1,0 +1,30 @@
+{
+    "routing": {
+        "skills": [
+            "Loomis",
+            "RemoteGuarding",
+            "Support",
+            "Emergency"
+        ],
+        "levels": {
+            "Loomis": 10,
+            "RemoteGuarding": 10,
+            "Support": 10,
+            "Emergency": 10
+        }
+    },
+    "full_name": "Travis Catoe",
+    "onlyTransfer": false,
+    "image_url": "",
+    "roles": [
+        "supervisor",
+        "wfo.full_access",
+        "wfo.team_leader"
+    ],
+    "contact_uri": "client:Travis_2ECatoe_40securitasinc_2Ecom",
+    "disabled_skills": {
+        "skills": [],
+        "levels": {}
+    },
+    "email": "Travis.Catoe@securitasinc.com"
+}

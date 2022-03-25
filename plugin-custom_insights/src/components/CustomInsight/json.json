@@ -1,0 +1,29 @@
+{
+    "routing": {
+        "skills": [
+            "Emergency",
+            "Loomis",
+            "RemoteGuarding",
+            "Support"
+        ],
+        "levels": {
+            "Emergency": 10,
+            "Loomis": 10,
+            "RemoteGuarding": 10,
+            "Support": 10
+        }
+    },
+    "full_name": "Sean Carr",
+    "onlyTransfer": false,
+    "image_url": "",
+    "roles": [
+        "supervisor",
+        "wfo.full_access"
+    ],
+    "contact_uri": "client:Sean_2ECarr_40securitasinc_2Ecom",
+    "disabled_skills": {
+        "skills": [],
+        "levels": {}
+    },
+    "email": "Sean.Carr@securitasinc.com"
+}

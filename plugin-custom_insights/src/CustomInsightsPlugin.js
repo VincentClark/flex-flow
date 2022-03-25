@@ -1,12 +1,14 @@
 import React from 'react';
 import { VERSION } from '@twilio/flex-ui';
-import * as FlexPlugin from '@twilio/flex-plugin';
+import { FlexPlugin } from '@twilio/flex-plugin';
+
+import CustomTaskListContainer from './components/CustomTaskList/CustomTaskList.Container';
+import CustomInightContainer from './components/CustomInsight/CustomInsight.Container';
 import reducers, { namespace } from './states';
-import CustomChatComponent from './components/CustomChat/CustomChatComponent.Container';
 
-const PLUGIN_NAME = 'CustomchatPlugin';
+const PLUGIN_NAME = 'CustomInsightsPlugin';
 
-export default class CustomchatPlugin extends FlexPlugin {
+export default class CustomInsightsPlugin extends FlexPlugin {
   constructor() {
     super(PLUGIN_NAME);
   }
@@ -22,7 +24,9 @@ export default class CustomchatPlugin extends FlexPlugin {
     this.registerReducers(manager);
 
     const options = { sortOrder: -1 };
-    flex.AgentDesktopView.Panel1.Content.add(<CustomChatComponent key="customChat" />, options);
+
+
+    flex.AgentDesktopView.Panel1.Content.add(<CustomInightContainer key="CustomInsightContainer" manager={manager} flex={flex} />, options);
   }
 
   /**

@@ -208,7 +208,7 @@ class MessagingService {
                 participants: [{
                     'Identifier': `${toNumber}`,
                     'ProxyIdentifier': `+${fromNumber}`,
-                    'FriendlyName': `${toNumber.split('+')[1]}`
+                    'FriendlyName': `${toNumber}`
                 }]
             })
             .then(session => {
@@ -242,7 +242,7 @@ class MessagingService {
                         .then(
                             attributes => {
                                 console.log("attributes", attributes, attributes.attributes);
-                                return Object.assign(JSON.parse(attributes.attributes), { proxySession: proxySession.sid, identifier: toNumber })
+                                return Object.assign(JSON.parse(attributes.attributes), { proxySession: proxySession.sid, identifier: toNumber, uniqueName: fromNumber })
                             }
                         ))
                 })
