@@ -17,20 +17,21 @@ const CustomInsight = (props) => {
     // conversation_label_1
 
     props.flex.Actions.addListener("beforeAcceptTask", (payload, abortFunction) => {
-        const insightsInstance = props.flex.Manager.getInstance().insightsClient;
-        const twilisock = insightsInstance.twilisock;
-        console.log("buggin before", props.flex)
-        console.log("buggin late", payload.task._task.attributes)
-        payload.task._task.attributes.conversation_lable_1 = "test";
+        //  const insightsInstance = props.flex.Manager.getInstance().insightsClient;
+        //  const twilisock = insightsInstance.twilisock;
+        //  console.log("buggin before", props.flex)
+        // console.log("buggin late", payload.task._task.attributes)
+        // payload.task._task.attributes.conversation_lable_1 = "test";
         // alert("Triggered before event AcceptTask");
         // if (!window.confirm("Are you sure you want to accept the task?")) {
         //   abortFunction();
         // }
-        myInfo(payload.task._task.attributes.call_sid, "flexNotes");
+        // myInfo(payload.task._task.attributes.call_sid, "flexNotes");
         // console.log("buggin", payload);
         // Manager.getInstance().workerClient.attributes
         // console.log("buggin - task", props.flex.Manager.getInstance().workerClient)
         //console.log("buggin insights", insightsInstance);
+
     });
 
 
